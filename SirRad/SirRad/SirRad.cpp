@@ -2,22 +2,37 @@
 //
 
 #include <iostream>
+#include <ctime>
 #include "SDL.h"
 #include "GameEngine.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+
+GameEngine* globalGame = nullptr;
+
+void MainLoop()
+{
+    if (globalGame) {
+        globalGame->Step();
+    }
+}
+#endif
+
 int main(int argc, char* argv[])
 {
-    srand(time(NULL));
-    bool exit = false;
-    //Try to initialise.. if we can't, then exit this program:
-    //if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
-        //  return 1;
-    //Create a window
-    SDL_Window* window = SDL_CreateWindow("16598945 - Sir Rad!", 100, 100, 800, 450, 4);
+    SDL_Window* window = SDL_CreateWindow("Sir Rad!", 100, 100, 800, 450, SDL_WINDOW_SHOWN);
 
-
-    GameEngine theGame = GameEngine(window);
-    //Finally, exit and unload everything
+#ifdef __EMSCRIPTEN__
+    globalGame = new GameEngine(window);
+    // fps = 0 delegates to browser's requestAnimationFrame
+    // 1 simulates infinite loop and prevents main() from unwinding
+    emscripten_set_main_loop(MainLoop, 60, 1);
+#else
+    GameEngine theGame(window);
+    // Desktop loop here...
     SDL_Quit();
+#endif
+
     return 0;
 }

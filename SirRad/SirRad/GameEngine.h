@@ -39,6 +39,7 @@ public:
 	vector<EnemyContainer*> enemyContainers;
 	Character* Background;
 	float totalTime = 0;
+	void Step();
 	void ChangeScore(int change);
 	//logging
 	void PrintLog(string text);

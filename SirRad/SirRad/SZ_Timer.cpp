@@ -6,7 +6,7 @@ SZ_Timer::SZ_Timer()
 SZ_Timer::SZ_Timer(GameEngine* _parent)
 {
 	parent = _parent;
-	parent->PrintLog("SZ_Timer was created, thanks Oliver!");
+	parent->PrintLog("SZ_Timer was created, thanks Olivier!");
 	startTicks = 0;
 }
 SZ_Timer::~SZ_Timer()

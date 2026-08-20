@@ -1,5 +1,7 @@
 #include "GameEngine.h"
-
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 /// <summary>
 /// this constructor starts the game and it's loop
@@ -16,7 +18,7 @@ GameEngine::GameEngine(SDL_Window* window)
     GWindow = GameWindow(ImageRender.GetSurface(), this, window);
     Collider.Init(this);
 
-    PrintLog("splash screen is running");
+    //PrintLog("splash screen is running");
     splashLife = new GameOfLife(100, 100, ImageRender.GetRenderer(), this);
     &splashLife->Create(100,100, ImageRender.GetRenderer(), this);
     SDL_RenderSetLogicalSize(ImageRender.GetRenderer(), 800, 450);
@@ -40,7 +42,7 @@ GameEngine::GameEngine(SDL_Window* window)
     Message_rect.y = 0;
     Message_rect.w = 100;
     Message_rect.h = 50;
-    PrintLog("Game proper is starting");
+    //PrintLog("Game proper is starting");
     GameLoop(); ////always goes last
 }
 
@@ -75,25 +77,72 @@ void GameEngine::PrintLog(string text)
     }
 }
 
+void GameEngine::Step()
+{
+    static Uint32 lastTime = SDL_GetTicks();
+    static float timeAccumulator = 0.0f;
+    const float TIME_STEP = 16.667f; // Fixed 60 FPS update step
+
+    Uint32 currentTime = SDL_GetTicks();
+    float frameTime = (float)(currentTime - lastTime);
+    lastTime = currentTime;
+
+    // Prevent sudden huge jumps if the browser tab loses focus
+    if (frameTime > 100.0f)
+    {
+        frameTime = 100.0f;
+    }
+
+    timeAccumulator += frameTime;
+
+    // 1. Process inputs every frame
+    Input();
+
+    // 2. Only run game logic in fixed 16.667 ms slices
+    while (timeAccumulator >= TIME_STEP)
+    {
+        Update();
+        totalTime += TIME_STEP;
+        timeAccumulator -= TIME_STEP;
+    }
+
+    // 3. Render at the screen's refresh rate
+    Render();
+
+#ifndef __EMSCRIPTEN__
+    // Desktop frame-limiting delay
+    if (TIME_STEP - aTimer.getTicks() < 0)
+    {
+        PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
+    }
+    else
+    {
+        PrintLog("FrameRate: 16.667");
+        SDL_Delay(TIME_STEP - aTimer.getTicks());
+    }
+    aTimer.resetTicksTimer();
+#endif
+}
+
+#ifdef __EMSCRIPTEN__
+static void EmscriptenLoopCallback(void* arg)
+{
+    GameEngine* engine = static_cast<GameEngine*>(arg);
+    engine->Step();
+}
+#endif
+
 void GameEngine::GameLoop()
 {
+#ifdef __EMSCRIPTEN__
+    // 0 = simulate infinite loop, 1 = match browser refresh rate
+    emscripten_set_main_loop_arg(EmscriptenLoopCallback, this, 0, 1);
+#else
     while (!quit)
     {
-        aTimer.resetTicksTimer();
-        Input();
-        Update();
-        Render();
-        totalTime += 16.667;
-        if(16.667 - aTimer.getTicks() < 0)
-        {
-            PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
-        }
-        else 
-        {
-            PrintLog("FrameRate: 16.667"); //print 16.667 if get ticks is less than 16.667 since delay sets the framerate to this valued
-            SDL_Delay(16.667 - aTimer.getTicks());
-        }
+        Step();
     }
+#endif
 }
 void GameEngine::Input()
 {
@@ -112,27 +161,27 @@ void GameEngine::Input()
                 quit = true;
                 break;
             case SDLK_a:
-                PrintLog("a pressed to move left");
+                //PrintLog("a pressed to move left");
                 MoveLeft = true;
                 SirRad->currentAnimation = 2;
                 SirRad->performingTrick = false;
                 break;
             case SDLK_d:
-                PrintLog("d pressed to move right");
+                //PrintLog("d pressed to move right");
                 MoveRight = true;
                 SirRad->currentAnimation = 2;
                 SirRad->performingTrick = false;
                 break;
             case SDLK_q:
-                PrintLog("q pressed to ollie");
+                //PrintLog("q pressed to ollie");
                 SirRad->DoTrick(3);
                 break;
             case SDLK_e:
-                PrintLog("e pressed to christ");
+                //PrintLog("e pressed to christ");
                 SirRad->DoTrick(4);
                 break;
             case SDLK_f:
-                PrintLog("f pressed to flip");
+                //PrintLog("f pressed to flip");
                 SirRad->DoTrick(5);
                 break;
             default:
@@ -143,17 +192,17 @@ void GameEngine::Input()
             switch (event.key.keysym.sym)
             {
             case SDLK_a:
-                PrintLog("a lifted to stop move left");
+                //PrintLog("a lifted to stop move left");
                 MoveLeft = false;
                 SirRad->currentAnimation = 1;
                 break;
             case SDLK_d:
-                PrintLog("d lifted to stop move right");
+                //PrintLog("d lifted to stop move right");
                 MoveRight = false;
                 SirRad->currentAnimation = 1;
                 break;
             case SDLK_l:
-                PrintLog("is still logging: " + to_string(!isLogging));
+                //PrintLog("is still logging: " + to_string(!isLogging));
                 isLogging = !isLogging;
                 break;
             case SDLK_p:
@@ -187,10 +236,10 @@ void GameEngine::Update()
     SirRad->ChangeDirection(0);
     SirRad->Animate();
     UpdateContainers();
-    PrintLog("Currently in Main Game");
+    //PrintLog("Currently in Main Game");
     if (totalTime > 80000) {
         quit = true;
-        PrintLog("Quit with overtime");
+        //PrintLog("Quit with overtime");
         PrintLog("Your score was " + to_string(GameScore));
     }
     else if (totalTime > 65000 && GameScore < 30000) /////////////This is overtime
@@ -200,7 +249,7 @@ void GameEngine::Update()
         PrintLog("Your score was " + to_string(GameScore));
     }
     if (totalTime > 65000) {
-        PrintLog("Currently in Overtime");
+        //PrintLog("Currently in Overtime");
     }
 }
 /// <summary>
@@ -232,21 +281,21 @@ void GameEngine::Splash()
         totalTime += 16.667;
         if (16.667 - aTimer.getTicks() < 0)
         {
-            PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
+            //PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
         }
         else
         {
-            PrintLog("FrameRate: 16.667"); //print 16.667 if get ticks is less than 16.667 since delay sets the framerate to this valued
+            //PrintLog("FrameRate: 16.667"); //print 16.667 if get ticks is less than 16.667 since delay sets the framerate to this valued
             SDL_Delay(16.667 - aTimer.getTicks());
         }
-        PrintLog("Currently in SplashScreen");
+        //PrintLog("Currently in SplashScreen");
         if (totalTime > 5000) {
-            PrintLog("Quit Splash Screen");
+            //PrintLog("Quit Splash Screen");
             quit = true;
         }
     }
     delete splashLife;
-    PrintLog("Splash deleted");
+    //PrintLog("Splash deleted");
     quit = false;
 }
 
@@ -285,7 +334,7 @@ void GameEngine::SplashUpdate()
             switch (event.key.keysym.sym)
             {
             case SDLK_l:
-                PrintLog("is still logging: " + to_string(!isLogging));
+                //PrintLog("is still logging: " + to_string(!isLogging));
                 isLogging = !isLogging;
                 break;
             case SDLK_p:
@@ -348,15 +397,52 @@ void GameEngine::RenderContainers()
 
 void GameEngine::DrawText()
 {
-    SDL_RenderCopy(ImageRender.GetRenderer(), Message, NULL, &Message_rect);
-    if (("SCORE: " + to_string(GameScore)) != (textMessage))
+    // 1. Check if the font pointer exists
+    if (Sans == nullptr)
     {
-        SDL_DestroyTexture(Message);
-        //Sans = TTF_OpenFont("Text/RujisHandwritingFontV20-vrqZ.ttf", 24);
-        textColour = { 255, 255, 255 };
+        static bool fontLogged = false;
+        if (!fontLogged) {
+            printf("[ERROR] Sans font is NULL! TTF_Error: %s\n", TTF_GetError());
+            fontLogged = true;
+        }
+        return;
+    }
+
+    if (("SCORE: " + to_string(GameScore)) != (textMessage) || Message == nullptr)
+    {
+        if (Message != nullptr)
+        {
+            SDL_DestroyTexture(Message);
+            Message = nullptr;
+        }
+
+        textColour = { 255, 255, 255, 255 };
         textMessage = "SCORE: " + to_string(GameScore);
         surfaceMessage = TTF_RenderText_Solid(Sans, textMessage.c_str(), textColour);
+
+        if (surfaceMessage == nullptr)
+        {
+            printf("[ERROR] TTF_RenderText_Solid returned NULL: %s\n", TTF_GetError());
+            return;
+        }
+
         Message = SDL_CreateTextureFromSurface(ImageRender.GetRenderer(), surfaceMessage);
+
+        // Force the position explicitly every time the score changes
+        Message_rect.x = 20;
+        Message_rect.y = 20;
+        Message_rect.w = surfaceMessage->w;
+        Message_rect.h = surfaceMessage->h;
+
         SDL_FreeSurface(surfaceMessage);
+        surfaceMessage = nullptr;
+
+        printf("[SUCCESS] Score texture generated: %dx%d at (%d, %d)\n",
+            Message_rect.w, Message_rect.h, Message_rect.x, Message_rect.y);
+    }
+
+    if (Message != nullptr)
+    {
+        SDL_RenderCopy(ImageRender.GetRenderer(), Message, NULL, &Message_rect);
     }
 }
