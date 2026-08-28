@@ -241,12 +241,22 @@ void GameEngine::Update()
         quit = true;
         //PrintLog("Quit with overtime");
         PrintLog("Your score was " + to_string(GameScore));
+#ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+        SDL_Quit();
+        EM_ASM(document.exitPointerLock(); );
+#endif
     }
     else if (totalTime > 65000 && GameScore < 30000) /////////////This is overtime
     {
         quit = true;
         PrintLog("Quit without overtime");
         PrintLog("Your score was " + to_string(GameScore));
+#ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+        SDL_Quit();
+        EM_ASM(document.exitPointerLock(); );
+#endif
     }
     if (totalTime > 65000) {
         //PrintLog("Currently in Overtime");
