@@ -44,35 +44,29 @@ void Collision::CalculateHitZone(Character* thisChar)
 
 void Collision::CheckCollision(Character* thisChar)
 {
-	int ThisLXBound = thisChar->GetPosX();
-	int ThisRXBound = thisChar->GetPosX() + thisChar->GetSizeW();
-	int ThisTYBound = thisChar->GetPosY();
-	int ThisBYBound = thisChar->GetPosY() + thisChar->GetSizeH();
-	int ListLXBound;
-	int ListRXBound;
-	int ListTYBound;
-	int ListBYBound;
-	for (int i = 0; i < parent->allcharacters.size(); i++)
+	int thisLX = thisChar->GetPosX();
+	int thisRX = thisChar->GetPosX() + thisChar->GetSizeW();
+	int thisTY = thisChar->GetPosY();
+	int thisBY = thisChar->GetPosY() + thisChar->GetSizeH();
+
+	for (size_t i = 0; i < parent->allcharacters.size(); i++)
 	{
-		if ((parent->allcharacters[i]->collisionZone[0] == thisChar->collisionZone[0]) && (parent->allcharacters[i]->collisionZone[1] == thisChar->collisionZone[1]))
+		Character* other = parent->allcharacters[i];
+
+		// Guard clauses to prevent deep nesting
+		if (other == thisChar || !other->GetSpawned()) continue;
+		if (other->collisionZone[0] != thisChar->collisionZone[0] ||
+			other->collisionZone[1] != thisChar->collisionZone[1]) continue;
+
+		int listLX = other->GetPosX() - other->GetSizeW() / 2;
+		int listRX = other->GetPosX() + other->GetSizeW() / 2;
+		int listTY = other->GetPosY() - other->GetSizeH() / 2;
+		int listBY = other->GetPosY() + other->GetSizeH() / 2;
+
+		// AABB Collision check
+		if (thisRX > listLX && thisLX < listRX && thisTY < listBY && thisBY > listTY)
 		{
-			if (parent->allcharacters[i]->GetSpawned())
-			{
-				if (parent->allcharacters[i] != thisChar)
-				{
-					ListLXBound = parent->allcharacters[i]->GetPosX() - parent->allcharacters[i]->GetSizeW() / 2;
-					ListRXBound = parent->allcharacters[i]->GetPosX() + parent->allcharacters[i]->GetSizeW() / 2;
-					ListTYBound = parent->allcharacters[i]->GetPosY() - parent->allcharacters[i]->GetSizeH() / 2;
-					ListBYBound = parent->allcharacters[i]->GetPosY() + parent->allcharacters[i]->GetSizeH()/2;
-					if ((ThisRXBound > ListLXBound) && (ThisLXBound < ListRXBound))
-					{
-						if ((ThisTYBound < ListBYBound) && (ThisBYBound > ListTYBound))
-						{
-							thisChar->Collide(parent->allcharacters[i]);
-						}
-					}
-				}
-			}
+			thisChar->Collide(other);
 		}
 	}
 }
