@@ -16,7 +16,8 @@ GameEngine::GameEngine(SDL_Window* window)
     SoundPlayer.MusicVector.push_back(SoundPlayer.MixMusic(SoundPlayer.MusicLocationVector[0]));
     Mix_PlayMusic(SoundPlayer.MusicVector[0], 0);
     GWindow = GameWindow(ImageRender.GetSurface(), this, window);
-    Collider.Init(this);
+    Collider = new Collision();
+    Collider->Init(this);
 
     //PrintLog("splash screen is running");
     splashLife = new GameOfLife(100, 100, ImageRender.GetRenderer(), this);
@@ -236,7 +237,18 @@ void GameEngine::Update()
     SirRad->ChangeDirection(0);
     SirRad->Animate();
     UpdateContainers();
-    //PrintLog("Currently in Main Game");
+    Collider->UpdateGrid();
+
+    Collider->CheckCollision(SirRad);
+
+    for (size_t i = 0; i < allcharacters.size(); i++)
+    {
+        if (allcharacters[i]->GetSpawned())
+        {
+            Collider->CheckCollision(allcharacters[i]);
+        }
+    }
+
     if (totalTime > 80000) {
         quit = true;
         //PrintLog("Quit with overtime");

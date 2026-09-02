@@ -17,7 +17,6 @@ bool Fireball::Move()
 	position[1] -= speed * direction[1];
 	FindCollisionZone();
 	CheckBoundaries();
-	parent->Collider.CheckCollision(this);
 	return false;
 }
 

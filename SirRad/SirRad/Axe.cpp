@@ -19,7 +19,6 @@ bool Axe::Move()
 	direction[1] -= 0.05f;
 	FindCollisionZone();
 	CheckBoundaries();
-	parent->Collider.CheckCollision(this);
 	return false;
 }
 

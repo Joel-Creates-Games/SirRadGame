@@ -29,7 +29,6 @@ bool Player::Move()
 	position[0] += velocity.X;
 	position[1] -= velocity.Y;
 	FindCollisionZone();
-	parent->Collider.CheckCollision(this);
 	SetRotation();
 	return false;
 }

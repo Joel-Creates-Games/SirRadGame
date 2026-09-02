@@ -14,56 +14,67 @@ void Collision::Init(GameEngine* _parent)
 {
 	parent = _parent;
 	parent->PrintLog("Collision initiated");
-	for (int i = 0; i < hitZoneDepth; i++)
-	{
-		hitZonesX.push_back((parent->GWindow.GetWindow()->w / hitZoneDepth) * i);
-	}
-	for (int i = 0; i < hitZoneDepth; i++)
-	{
-		hitZonesY.push_back((parent->GWindow.GetWindow()->h / hitZoneDepth) * i);
-	}
+	spatialGrid.resize(hitZoneDepth * hitZoneDepth);
 }
 
 void Collision::CalculateHitZone(Character* thisChar)
 {
-	for (int i = 0; i < hitZoneDepth; i++)
-	{
-		if (thisChar->GetPosX() > hitZonesX[i])
-		{
-			thisChar->collisionZone[0] = i;
-		}
+	int zoneWidth = parent->GWindow.GetWindow()->w / hitZoneDepth;
+	int zoneHeight = parent->GWindow.GetWindow()->h / hitZoneDepth;
+
+	int gridX = thisChar->GetPosX() / zoneWidth;
+	int gridY = thisChar->GetPosY() / zoneHeight;
+
+	if (gridX < 0) gridX = 0;
+	if (gridX >= hitZoneDepth) gridX = hitZoneDepth - 1;
+
+	if (gridY < 0) gridY = 0;
+	if (gridY >= hitZoneDepth) gridY = hitZoneDepth - 1;
+
+	thisChar->collisionZone[0] = gridX;
+	thisChar->collisionZone[1] = gridY;
+}
+
+void Collision::UpdateGrid()
+{
+	for (size_t i = 0; i < spatialGrid.size(); i++) {
+		spatialGrid[i].clear();
 	}
-	for (int i = 0; i < hitZoneDepth; i++)
-	{
-		if (thisChar->GetPosY() > hitZonesY[i])
-		{
-			thisChar->collisionZone[1] = i;
-		}
+
+	for (size_t i = 0; i < parent->allcharacters.size(); i++) {
+		Character* c = parent->allcharacters[i];
+		if (!c->GetSpawned()) continue;
+
+		CalculateHitZone(c);
+
+		int bucketIndex = c->collisionZone[0] + (c->collisionZone[1] * hitZoneDepth);
+
+		spatialGrid[bucketIndex].push_back(c);
 	}
 }
 
 void Collision::CheckCollision(Character* thisChar)
 {
+	int bucketIndex = thisChar->collisionZone[0] + (thisChar->collisionZone[1] * hitZoneDepth);
+
+	std::vector<Character*>& localZone = spatialGrid[bucketIndex];
+
 	int thisLX = thisChar->GetPosX();
 	int thisRX = thisChar->GetPosX() + thisChar->GetSizeW();
 	int thisTY = thisChar->GetPosY();
 	int thisBY = thisChar->GetPosY() + thisChar->GetSizeH();
 
-	for (size_t i = 0; i < parent->allcharacters.size(); i++)
+	for (size_t i = 0; i < localZone.size(); i++)
 	{
-		Character* other = parent->allcharacters[i];
+		Character* other = localZone[i];
 
-		// Guard clauses to prevent deep nesting
-		if (other == thisChar || !other->GetSpawned()) continue;
-		if (other->collisionZone[0] != thisChar->collisionZone[0] ||
-			other->collisionZone[1] != thisChar->collisionZone[1]) continue;
+		if (other == thisChar) continue;
 
 		int listLX = other->GetPosX() - other->GetSizeW() / 2;
 		int listRX = other->GetPosX() + other->GetSizeW() / 2;
 		int listTY = other->GetPosY() - other->GetSizeH() / 2;
 		int listBY = other->GetPosY() + other->GetSizeH() / 2;
 
-		// AABB Collision check
 		if (thisRX > listLX && thisLX < listRX && thisTY < listBY && thisBY > listTY)
 		{
 			thisChar->Collide(other);

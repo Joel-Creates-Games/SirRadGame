@@ -28,7 +28,6 @@ bool Orc::Move()
 	}
 	FindCollisionZone();
 	CheckBoundaries();
-	parent->Collider.CheckCollision(this);
 	return false;
 }
 

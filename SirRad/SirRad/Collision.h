@@ -14,9 +14,11 @@ public:
 	GameEngine* parent;
 	void CalculateHitZone(Character* thisChar);
 	void CheckCollision(Character* thisChar);
+	void UpdateGrid();
 private:
 	int hitZoneDepth = 3;
 	std::vector<int> hitZonesX;
 	std::vector<int> hitZonesY;
+	std::vector<std::vector<Character*>> spatialGrid;
 };
 #endif

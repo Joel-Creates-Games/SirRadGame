@@ -34,7 +34,7 @@ public:
 	SoundPlayer SoundPlayer;
 	Player* SirRad;
 	GameOfLife* splashLife;
-	Collision Collider;
+	Collision* Collider;
 	vector<Character*> allcharacters;
 	vector<EnemyContainer*> enemyContainers;
 	Character* Background;

@@ -42,7 +42,7 @@ void Character::Collide(Character* other)
 
 void Character::FindCollisionZone()
 {
-	parent->Collider.CalculateHitZone(this);
+	parent->Collider->CalculateHitZone(this);
 }
 
 void Character::Init(GameEngine* _parent)
