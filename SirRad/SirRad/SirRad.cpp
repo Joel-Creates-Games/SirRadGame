@@ -25,12 +25,9 @@ int main(int argc, char* argv[])
 
 #ifdef __EMSCRIPTEN__
     globalGame = new GameEngine(window);
-    // fps = 0 delegates to browser's requestAnimationFrame
-    // 1 simulates infinite loop and prevents main() from unwinding
     emscripten_set_main_loop(MainLoop, 60, 1);
 #else
     GameEngine theGame(window);
-    // Desktop loop here...
     SDL_Quit();
 #endif
 
