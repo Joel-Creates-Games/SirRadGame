@@ -8,7 +8,7 @@ EnemyContainer::EnemyContainer(int _count, EnemyTypes enemyType, float _spawnDel
 {
 	parent = _parent;
 	parent->PrintLog("Enemy Container created");
-	parent->enemyContainers.push_back(this);
+	//parent->enemyContainers.push_back(this);
 	CreateEnemies(_count, enemyType);
 	spawnDelay = _spawnDelay * 1000;
 	spawnWait = _spawnWait * 1000;

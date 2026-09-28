@@ -23,7 +23,7 @@ GameEngine::GameEngine(SDL_Window* window)
     splashLife = new GameOfLife(100, 100, ImageRender.GetRenderer(), this);
     &splashLife->Create(100,100, ImageRender.GetRenderer(), this);
     SDL_RenderSetLogicalSize(ImageRender.GetRenderer(), 800, 450);
-    Splash();
+    //Splash();
 
     int speed = 0;
     int size[2] = { GWindow.GetWindow()->w, GWindow.GetWindow()->h }; int pos[2] = { GWindow.GetWindow()->w / 2, GWindow.GetWindow()->h / 2 };
@@ -44,7 +44,7 @@ GameEngine::GameEngine(SDL_Window* window)
     Message_rect.w = 100;
     Message_rect.h = 50;
     //PrintLog("Game proper is starting");
-    GameLoop(); ////always goes last
+    //GameLoop(); ////always goes last
 }
 
 GameEngine::~GameEngine()
@@ -54,7 +54,7 @@ GameEngine::~GameEngine()
     PrintLog("Text Unloaded");
     for (int i = 0; i < 3; i++)
     {
-        delete enemyContainers[5-(i*2)];
+        delete enemyContainers[i];
     }
     //SDL_FreeSurface(surfaceMessage);
     delete Background;
@@ -88,7 +88,6 @@ void GameEngine::Step()
     float frameTime = (float)(currentTime - lastTime);
     lastTime = currentTime;
 
-    // Prevent sudden huge jumps if the browser tab loses focus
     if (frameTime > 100.0f)
     {
         frameTime = 100.0f;
@@ -96,10 +95,8 @@ void GameEngine::Step()
 
     timeAccumulator += frameTime;
 
-    // 1. Process inputs every frame
     Input();
 
-    // 2. Only run game logic in fixed 16.667 ms slices
     while (timeAccumulator >= TIME_STEP)
     {
         Update();
@@ -107,7 +104,6 @@ void GameEngine::Step()
         timeAccumulator -= TIME_STEP;
     }
 
-    // 3. Render at the screen's refresh rate
     Render();
 
 #ifndef __EMSCRIPTEN__
@@ -135,15 +131,10 @@ static void EmscriptenLoopCallback(void* arg)
 
 void GameEngine::GameLoop()
 {
-#ifdef __EMSCRIPTEN__
-    // 0 = simulate infinite loop, 1 = match browser refresh rate
-    emscripten_set_main_loop_arg(EmscriptenLoopCallback, this, 0, 1);
-#else
     while (!quit)
     {
         Step();
     }
-#endif
 }
 void GameEngine::Input()
 {

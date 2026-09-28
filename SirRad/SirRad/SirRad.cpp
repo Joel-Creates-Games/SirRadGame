@@ -28,6 +28,8 @@ int main(int argc, char* argv[])
     emscripten_set_main_loop(MainLoop, 60, 1);
 #else
     GameEngine theGame(window);
+    theGame.Splash();
+    theGame.GameLoop();
     SDL_Quit();
 #endif
 

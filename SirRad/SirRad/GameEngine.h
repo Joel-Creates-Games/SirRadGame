@@ -44,6 +44,8 @@ public:
 	//logging
 	void PrintLog(string text);
 	bool isLogging = true;
+	void Splash();
+	void GameLoop(); //the main game loop
 private:
 	SZ_Timer aTimer;
 	bool quit = false;
@@ -55,7 +57,6 @@ private:
 	SDL_Event event;
 	//GameOfLife *Life;
 	ColourGame *game;
-	void GameLoop(); //the main game loop
 	void Input();
 	void Update(); //updates values of objects
 	void Render(); //renders updated objects 
@@ -67,7 +68,6 @@ private:
 
 	//splash screen
 	int splashFrames = 300;
-	void Splash();
 	void SplashUpdate();
 	void SplashRender();
 

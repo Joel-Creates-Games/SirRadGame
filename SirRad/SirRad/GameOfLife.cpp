@@ -72,9 +72,6 @@ void GameOfLife::DrawCharacter(Character* draw)
 	SDL_Rect rect = { draw->GetPosX(), draw->GetPosY(), draw->GetSizeW(), draw->GetSizeH() };
 
 	SDL_RenderFillRect(renderer, &rect);
-	//SDL_RenderDrawRect(renderer, &rect);
-
-	//SDL_RenderDrawRect(renderer, &rect);
 }
 
 void GameOfLife::ChangeLife()
@@ -89,22 +86,14 @@ void GameOfLife::ChangeLife()
 			nextAmount = 0;
 			for (int a = -1; a < 2; a++)
 			{
-				if (o + a < 0 || o + a == Xsize)
-				{
-					continue;
-				}
+				if (o + a < 0 || o + a == Xsize){ continue; }
 				for (int b = -1; b < 2; b++)
 				{
-					if (i + b < 0 || i + b == Ysize)
+					if (i + b < 0 || i + b == Ysize) { continue; }
+					if (!grid[i + b][o + a]) { continue; }
+					if (b != 0 || a != 0) 
 					{
-						continue;
-					}
-					if (grid[i + b][o + a])
-					{
-						if (b != 0 || a != 0) 
-						{
-							nextAmount++;
-						}
+						nextAmount++;
 					}
 				}
 			}
@@ -113,22 +102,14 @@ void GameOfLife::ChangeLife()
 				if (nextAmount == 2 || nextAmount == 3)
 				{
 					newGrid[i][o] = true;
+					continue;
 				}
-				/*if (nextAmount == 3)
-				{
-					grid[i][o] = true;
-				}*/
-				else
-				{
-					newGrid[i][o] = false;
-				}
+				newGrid[i][o] = false;
+				continue;
 			}
-			else 
+			if (nextAmount == 3) 
 			{
-				if (nextAmount == 3) 
-				{
-					newGrid[i][o] = true;
-				}
+				newGrid[i][o] = true;
 			}
 		}
 	}
