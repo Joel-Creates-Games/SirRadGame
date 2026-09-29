@@ -32,7 +32,7 @@ GameEngine::GameEngine(SDL_Window* window)
 
     int size2[2] = { 64, 64 }; int pos2[2] = { GWindow.GetMiddleW(), GWindow.GetFloor()};
     //////////////Create Main Character
-     SirRad = new Player(size2, pos2, &speed, "Images/SirRadSheet.png");
+    SirRad = new Player(size2, pos2, &speed, "Images/SirRadSheet.png");
     SirRad->Init(this);
     enemyContainers.push_back(new EnemyContainer(10, EnemyContainer::fireball, 21.5, 1.25, this));
     enemyContainers.push_back(new EnemyContainer(10, EnemyContainer::orc, 30, 5, this));

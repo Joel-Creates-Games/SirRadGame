@@ -5,6 +5,8 @@
 Axe::Axe() : Enemy(size, position, &speed, "Images/AxeSheet.png", 1)
 {
 	name = "Axe";
+	size[0] = 32;
+	size[1] = 32;
 }
 
 Axe::~Axe()
@@ -35,8 +37,6 @@ void Axe::Spawn()
 	{
 		if (OrcContainer->GetContainedEnemy()[i]->GetThrowing())
 		{
-			size[0] = 32;
-			size[1] = 32;
 			position[0] = OrcContainer->GetContainedEnemy()[i]->GetPosX();
 			position[1] = OrcContainer->GetContainedEnemy()[i]->GetPosY();
 			if (OrcContainer->GetContainedEnemy()[i]->GetPosX() < parent->GWindow.GetMiddleW())

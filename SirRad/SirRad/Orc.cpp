@@ -7,6 +7,8 @@ class EnemyContainer;
 Orc::Orc() : Enemy(size, position, &speed, "Images/OrcSheet.png", 3)
 {
 	name = "Orc";
+	size[0] = 64;
+	size[1] = 64;
 }
 
 Orc::~Orc()
@@ -41,8 +43,6 @@ void Orc::Spawn()
 	speed = 1;
 	AxeContainer = parent->enemyContainers[2];
 	int side = rand() % 2;
-	size[0] = 64;
-	size[1] = 64;
 	//position[0] = (parent->GWindow.GetWindow()->w * side) + (parent->GWindow.GetEighthW());
 	position[1] = (parent->GWindow.GetHeight());
 	if (side == 0) 

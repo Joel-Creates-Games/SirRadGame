@@ -70,6 +70,11 @@ void EnemyContainer::Spawn()
 	}
 }
 
+// TODO: Refactor to use a Texture Cache (Flyweight pattern).
+// Currently, every enemy instance loads its own duplicate SDL_Texture into VRAM.
+// In the future, ImageRenderer should maintain a std::map<string, SDL_Texture*> 
+// to load each image once and share the pointer across all objects in this pool.
+
 void EnemyContainer::CreateEnemies(int _count, EnemyTypes enemyType)
 {
 	for (int i = 0; i < _count; i++)

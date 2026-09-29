@@ -4,6 +4,8 @@
 Fireball::Fireball() : Enemy(size, position, &speed, "Images/FireballSheet.png", 2)
 {
 	name = "Fireball";
+	size[0] = 32;
+	size[1] = 32;
 }
 
 Fireball::~Fireball()
@@ -29,8 +31,6 @@ void Fireball::Spawn()
 {
 	speed = 5;
 	int side = rand() % 2;
-	size[0] = 32;
-	size[1] = 32;
 	position[0] = (parent->GWindow.GetWidth() * side) - (size[0] * side);
 	position[1] = (rand() % parent->GWindow.GetHeight());
 	direction[0] = (((float)position[0] - (float)parent->SirRad->GetPosX()) / (float)parent->GWindow.GetWidth());
