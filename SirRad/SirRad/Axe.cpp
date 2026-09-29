@@ -35,45 +35,41 @@ void Axe::Spawn()
 	OrcContainer = parent->enemyContainers[1];
 	for (int i = 0; i < OrcContainer->GetContainedEnemy().size(); i++)
 	{
-		if (OrcContainer->GetContainedEnemy()[i]->GetThrowing())
+		if (!OrcContainer->GetContainedEnemy()[i]->GetThrowing()) { return; }
+		position[0] = OrcContainer->GetContainedEnemy()[i]->GetPosX();
+		position[1] = OrcContainer->GetContainedEnemy()[i]->GetPosY();
+		if (OrcContainer->GetContainedEnemy()[i]->GetPosX() < parent->GWindow.GetMiddleW())
 		{
-			position[0] = OrcContainer->GetContainedEnemy()[i]->GetPosX();
-			position[1] = OrcContainer->GetContainedEnemy()[i]->GetPosY();
-			if (OrcContainer->GetContainedEnemy()[i]->GetPosX() < parent->GWindow.GetMiddleW())
-			{
-				direction[0] = -1;
-			}
-			else 
-			{
-				direction[0] = 1;
-			}
-			direction[1] = 3;
-			axeHit = false;
-			isSpawned = true;
-			parent->PrintLog("Axe Spawned");
-			break;
+			direction[0] = -1;
 		}
+		else 
+		{
+			direction[0] = 1;
+		}
+		direction[1] = 3;
+		axeHit = false;
+		isSpawned = true;
+		parent->PrintLog("Axe Spawned");
+		break;
 	}
 }
 
 void Axe::Collide(Character* other)
 {
-	if (!axeHit) 
+	if (axeHit) {return;}
+	if (other->name == "SirRad")
 	{
-		if (other->name == "SirRad")
+		axeHit = true;
+		if (parent->SirRad->performingTrick) 
 		{
-			axeHit = true;
-			if (parent->SirRad->performingTrick) 
-			{
-				parent->PrintLog("dodged with trick! + 500 score!");
-				parent->ChangeScore(500);
-			}
-			else 
-			{
-				parent->PrintLog("Axe Hit! - 300 score!");
-				parent->ChangeScore(-300);
-				Death();
-			}
+			parent->PrintLog("dodged with trick! + 500 score!");
+			parent->ChangeScore(500);
+		}
+		else 
+		{
+			parent->PrintLog("Axe Hit! - 300 score!");
+			parent->ChangeScore(-300);
+			Death();
 		}
 	}
 }

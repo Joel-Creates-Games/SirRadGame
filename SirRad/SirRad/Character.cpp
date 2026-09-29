@@ -71,39 +71,31 @@ void Character::ChangeDirection(int _direction)
 
 void Character::Animate()
 {
-	if ((parent->totalTime - lastFrame) > 250)
-	{
-		CurrentSpriteClip = (((currentAnimation - 1) * 4) + currentFrame);
-		currentFrame++;
-		if (currentFrame == 4) {
-			currentFrame = 0;
-		}
-		lastFrame = parent->totalTime;
+	if ((parent->totalTime - lastFrame) <= 250) { return; }
+	CurrentSpriteClip = (((currentAnimation - 1) * 4) + currentFrame);
+	currentFrame++;
+	if (currentFrame == 4) {
+		currentFrame = 0;
 	}
+	lastFrame = parent->totalTime;
 }
 
 void Character::LoadSprites()
 {
-	if (image_Texture != NULL) 
-	{
+	if (image_Texture == NULL) { parent->PrintLog("ERROR: no texture for spritesheet creation"); return;}
 		//int width = parent->ImageRender.loadSurface(ImagePath)->w / 4;
 		//int height = parent->ImageRender.loadSurface(ImagePath)->h/spriteRows;
-		SDL_Rect printRect;
-		for (int i = 0; i < spriteRows; i++)
-		{
-			for (int o = 0; o < 4; o++)
-			{
-				printRect.x = GetSizeW() * o;
-				printRect.y = GetSizeH() * i;
-				printRect.w = GetSizeW();
-				printRect.h = GetSizeH();
-				SpriteClips.push_back(printRect);
-			}
-		}
-	}
-	else 
+	SDL_Rect printRect;
+	for (int i = 0; i < spriteRows; i++)
 	{
-		parent->PrintLog("ERROR: no texture for spritesheet creation");
+		for (int o = 0; o < 4; o++)
+		{
+			printRect.x = GetSizeW() * o;
+			printRect.y = GetSizeH() * i;
+			printRect.w = GetSizeW();
+			printRect.h = GetSizeH();
+			SpriteClips.push_back(printRect);
+		}
 	}
 	parent->PrintLog("sprites for " + ImagePath + " loaded");
 }

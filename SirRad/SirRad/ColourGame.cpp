@@ -53,18 +53,16 @@ bool ColourGame::NextColour()
 {
 	end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = end - start;
-	if (elapsed_seconds.count() > 2) {
-		if (length == duration) {
-			std::cout << "your score is: " << score << endl;
-			SDL_Quit();
-			return true;
-		}
-		length++;
-		int size[2] = {length * 30, 30};
-		barFil.SetSize(size);
-		StartGame();
+	if (elapsed_seconds.count() <= 2) { return false; }
+	if (length == duration) {
+		std::cout << "your score is: " << score << endl;
+		SDL_Quit();
+		return true;
 	}
-	return false;
+	length++;
+	int size[2] = {length * 30, 30};
+	barFil.SetSize(size);
+	StartGame();
 }
 
 void ColourGame::SetColour(colour colour)
