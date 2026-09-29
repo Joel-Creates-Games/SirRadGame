@@ -16,7 +16,7 @@ Character::Character(int _size [2], int _position [2], int* _speed, string _Imag
 	position[0] = _position[0]; position[1] = _position[1];
 	speed = *_speed;
 	ImagePath = _ImagePath;
-	character_Surface = SDL_CreateRGBSurface(0, GetSizeW(), GetSizeH(), 32, 0, 0, 0, 0xff);
+	//character_Surface = SDL_CreateRGBSurface(0, GetSizeW(), GetSizeH(), 32, 0, 0, 0, 0xff);
 	spriteRows = _spriteRows;
 
 }
@@ -48,7 +48,7 @@ void Character::FindCollisionZone()
 void Character::Init(GameEngine* _parent)
 {
 	parent = _parent;
-	parent->PrintLog(name + "initiated");
+	parent->PrintLog(name + " initiated");
 	if (ImagePath != "None") {
 		//Uint32 colorkey = SDL_MapRGB(character_Surface->format, 0, 0, 0xff);
 		//SDL_SetColorKey(character_Surface, SDL_TRUE, colorkey);
@@ -86,17 +86,17 @@ void Character::LoadSprites()
 {
 	if (image_Texture != NULL) 
 	{
-		int width = parent->ImageRender.loadSurface(ImagePath)->w / 4;
-		int height = parent->ImageRender.loadSurface(ImagePath)->h/spriteRows;
+		//int width = parent->ImageRender.loadSurface(ImagePath)->w / 4;
+		//int height = parent->ImageRender.loadSurface(ImagePath)->h/spriteRows;
 		SDL_Rect printRect;
 		for (int i = 0; i < spriteRows; i++)
 		{
 			for (int o = 0; o < 4; o++)
 			{
-				printRect.x = width * o;
-				printRect.y = height * i;
-				printRect.w = width;
-				printRect.h = height;
+				printRect.x = GetSizeW() * o;
+				printRect.y = GetSizeH() * i;
+				printRect.w = GetSizeW();
+				printRect.h = GetSizeH();
 				SpriteClips.push_back(printRect);
 			}
 		}
