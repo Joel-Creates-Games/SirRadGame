@@ -11,8 +11,8 @@ GameOfLife::GameOfLife(int width, int height, SDL_Renderer* _renderer, GameEngin
 {
 	parent = _parent;
 	//CreateLife();
-	screenHeight = parent->GWindow.GetWindow()->h;
-	screenWidth = parent->GWindow.GetWindow()->w;
+	screenHeight = parent->GWindow.GetHeight();
+	screenWidth = parent->GWindow.GetWidth();
 	renderer = _renderer;
 	int speed = 0;
 	int size[2] = { (screenWidth / Xsize), (screenHeight / Ysize) }; int pos[2] = { 0, 0 };

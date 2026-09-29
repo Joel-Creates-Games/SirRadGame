@@ -35,11 +35,11 @@ bool Enemy::DetectCollision()
 
 void Enemy::CheckBoundaries()
 {
-	if ((position[0] < 0 - size[0]) || (position[0] > (parent->GWindow.GetWindow()->w) + size[0])) 
+	if ((position[0] < 0 - size[0]) || (position[0] > (parent->GWindow.GetWidth()) + size[0])) 
 	{
 		Death();
 	}
-	if ((position[1] <= 0) || (position[1] > (parent->GWindow.GetWindow()->h + size[1])))
+	if ((position[1] <= 0) || (position[1] > (parent->GWindow.GetHeight() + size[1])))
 	{
 		Death();
 	}

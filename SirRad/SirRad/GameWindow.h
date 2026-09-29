@@ -8,7 +8,7 @@ class GameWindow
 {
 public:
 	GameWindow();
-	GameWindow(SDL_Surface* window, GameEngine* parent, SDL_Window* _screen);
+	GameWindow(GameEngine* parent, SDL_Window* _screen);
 	~GameWindow();
 	SDL_Window* GetScreen() { return Screen; };
 	SDL_Surface* GetWindow() { return gWindow; };
@@ -16,6 +16,8 @@ public:
 	int GetMiddleH() { return Screen_MiddleH; };
 	int GetEighthW() { return Screen_EighthW; };
 	int GetEighthH() { return Screen_EighthH; };
+	int GetHeight() { return height; }
+	int GetWidth() { return width; }
 	int GetFloor() { return Game_Floor; };
 	int GetRampTop() { return rampTop; };
 private:
@@ -27,6 +29,8 @@ private:
 	int Screen_EighthH;
 	int Game_Floor;
 	int rampTop;
+	int height;
+	int width;
 	GameEngine* parent;
 };
 #endif

@@ -19,8 +19,8 @@ void Collision::Init(GameEngine* _parent)
 
 void Collision::CalculateHitZone(Character* thisChar)
 {
-	int zoneWidth = parent->GWindow.GetWindow()->w / hitZoneDepth;
-	int zoneHeight = parent->GWindow.GetWindow()->h / hitZoneDepth;
+	int zoneWidth = parent->GWindow.GetWidth() / hitZoneDepth;
+	int zoneHeight = parent->GWindow.GetHeight() / hitZoneDepth;
 
 	int gridX = thisChar->GetPosX() / zoneWidth;
 	int gridY = thisChar->GetPosY() / zoneHeight;

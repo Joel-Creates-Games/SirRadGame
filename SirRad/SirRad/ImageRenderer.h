@@ -15,11 +15,16 @@ public:
 	SDL_Window* GetWindow() { return gWindow; };
 	SDL_Surface* loadSurface(std::string path);
 	void DrawCharacter(Character* draw, SDL_Rect* clip = NULL);
+	int GetRendererHeight() { return rendererHeight; }
+	int GetRendererWidth() { return rendererWidth; }
 private:
 	SDL_Renderer* renderer;
 	SDL_Window* gWindow;
 	SDL_Surface* gScreenSurface;
 	GameEngine* parent;
+
+	int rendererHeight;
+	int rendererWidth;
 };
 #endif
 //reference https://lazyfoo.net/tutorials/SDL/11_clip_rendering_and_sprite_sheets/index.php

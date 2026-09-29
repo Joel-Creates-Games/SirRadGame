@@ -60,6 +60,7 @@ void Character::Init(GameEngine* _parent)
 		{
 			LoadSprites();
 		}
+		SDL_FreeSurface(character_Surface);
 	}
 	parent->allcharacters.push_back(this);
 }

@@ -30,7 +30,7 @@ void Axe::Death()
 void Axe::Spawn()
 {
 	speed = 1;
-	OrcContainer = parent->enemyContainers[2];
+	OrcContainer = parent->enemyContainers[1];
 	for (int i = 0; i < OrcContainer->GetContainedEnemy().size(); i++)
 	{
 		if (OrcContainer->GetContainedEnemy()[i]->GetThrowing())

@@ -36,69 +36,68 @@ bool Player::Move()
 void Player::Movement(bool moveLeft, bool moveRight)
 {
 	//cout << position[1] << endl;
-	if (position[1] > parent->GWindow.GetRampTop()) {
-		if (position[0] < parent->GWindow.GetMiddleW() + parent->GWindow.GetEighthW() && position[0] > parent->GWindow.GetMiddleW() - parent->GWindow.GetEighthW()) {///////////MIDDLE
-			ChangeMoveZone(0);
-			if (moveRight && velocity.X < 15) {
-				velocity.X += 1;
-			}
-			else if (!moveLeft && velocity.X > 0 && rand() % 10 <= 1) {
-				velocity.X -= 1;
-			}
-			if (moveLeft && velocity.X > -15) {
-				velocity.X -= 1;
-			}
-			else if (!moveRight && velocity.X < 0 && rand() % 10 <= 1) {
-				velocity.X += 1;
-			}
-			position[1] = parent->ImageRender.GetSurface()->h - (parent->ImageRender.GetSurface()->h / 8);
-			velocity.Y = 0;
+	if (position[1] <= parent->GWindow.GetRampTop()) {
+		velocity.Y -= 0.5f;
+		velocity.X = 0;
+		return;
+	}
+	if (position[0] < parent->GWindow.GetMiddleW() + parent->GWindow.GetEighthW() && position[0] > parent->GWindow.GetMiddleW() - parent->GWindow.GetEighthW()) {///////////MIDDLE
+		ChangeMoveZone(0);
+		if (moveRight && velocity.X < 15) {
+			velocity.X += 1;
 		}
-		if (position[0] > parent->GWindow.GetMiddleW() + (parent->GWindow.GetEighthW()/2)) /////////Right Side
-		{
-			ChangeMoveZone(1);
-			if (velocity.X > 0) {
-				//cout << speedUp << endl;
-				velocity.Y = velocity.Y + 1;
-				velocity.X -= 1;
-			}
-			else if (velocity.Y >= 0) {
-				velocity.Y = velocity.Y - 1;
-			}
-			if (velocity.Y < 0) {
-				if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1)))/2) >= abs(position[1] - parent->GWindow.GetFloor())) {
-					velocity.Y = velocity.Y + 1;
-					velocity.X = velocity.X - 1;
-				}
-				else {
-					velocity.Y = velocity.Y - 1;
-				}
-			}
+		else if (!moveLeft && velocity.X > 0 && rand() % 10 <= 1) {
+			velocity.X -= 1;
 		}
-		if (position[0] < parent->GWindow.GetMiddleW() - (parent->GWindow.GetEighthW()/2)) { /////////////////////LEFT SIDE
-			ChangeMoveZone(1);
-			if (velocity.X < 0) {
-				//cout << speedUp << endl;
+		if (moveLeft && velocity.X > -15) {
+			velocity.X -= 1;
+		}
+		else if (!moveRight && velocity.X < 0 && rand() % 10 <= 1) {
+			velocity.X += 1;
+		}
+		position[1] = parent->ImageRender.GetRendererHeight() - (parent->ImageRender.GetRendererHeight() / 8);
+		velocity.Y = 0;
+	}
+	if (position[0] > parent->GWindow.GetMiddleW() + (parent->GWindow.GetEighthW()/2)) /////////Right Side
+	{
+		ChangeMoveZone(1);
+		if (velocity.X > 0) {
+			//cout << speedUp << endl;
+			velocity.Y = velocity.Y + 1;
+			velocity.X -= 1;
+		}
+		else if (velocity.Y >= 0) {
+			velocity.Y = velocity.Y - 1;
+		}
+		if (velocity.Y < 0) {
+			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1)))/2) >= abs(position[1] - parent->GWindow.GetFloor())) {
 				velocity.Y = velocity.Y + 1;
-				velocity.X += 1;
+				velocity.X = velocity.X - 1;
 			}
-			else if (velocity.Y >= 0) {
+			else {
 				velocity.Y = velocity.Y - 1;
-			}
-			if (velocity.Y < 0) {
-				if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1))) / 2) >= abs(position[1] - parent->GWindow.GetFloor())) {
-					velocity.Y = velocity.Y + 1;
-					velocity.X = velocity.X + 1;
-				}
-				else {
-					velocity.Y = velocity.Y - 1;
-				}
 			}
 		}
 	}
-	else {
-		velocity.Y -= 0.5f;
-		velocity.X = 0;
+	if (position[0] < parent->GWindow.GetMiddleW() - (parent->GWindow.GetEighthW()/2)) { /////////////////////LEFT SIDE
+		ChangeMoveZone(1);
+		if (velocity.X < 0) {
+			//cout << speedUp << endl;
+			velocity.Y = velocity.Y + 1;
+			velocity.X += 1;
+		}
+		else if (velocity.Y >= 0) {
+			velocity.Y = velocity.Y - 1;
+		}
+		if (velocity.Y < 0) {
+			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1))) / 2) >= abs(position[1] - parent->GWindow.GetFloor())) {
+				velocity.Y = velocity.Y + 1;
+				velocity.X = velocity.X + 1;
+			}
+			else {
+				velocity.Y = velocity.Y - 1;
+			}
+		}
 	}
 }
 

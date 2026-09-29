@@ -21,6 +21,15 @@ void MainLoop()
 
 int main(int argc, char* argv[])
 {
+    string error;
+
+    //Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+        error = SDL_GetError();
+        std::cout << "SDL could not initialize Renderer! SDL Error: " + error << std::endl;
+        return -1;
+    }
     SDL_Window* window = SDL_CreateWindow("Sir Rad!", 100, 100, 800, 450, SDL_WINDOW_SHOWN);
 
 #ifdef __EMSCRIPTEN__

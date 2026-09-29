@@ -39,20 +39,20 @@ void Orc::Death()
 void Orc::Spawn()
 {
 	speed = 1;
-	AxeContainer = parent->enemyContainers[4];
+	AxeContainer = parent->enemyContainers[2];
 	int side = rand() % 2;
 	size[0] = 64;
 	size[1] = 64;
 	//position[0] = (parent->GWindow.GetWindow()->w * side) + (parent->GWindow.GetEighthW());
-	position[1] = (parent->GWindow.GetWindow()->h);
+	position[1] = (parent->GWindow.GetHeight());
 	if (side == 0) 
 	{
-		position[0] = (parent->GWindow.GetWindow()->w * side) + (parent->GWindow.GetEighthW() * 0.9);
+		position[0] = (parent->GWindow.GetWidth() * side) + (parent->GWindow.GetEighthW() * 0.9);
 		direction[0] = 0;
 	}
 	else 
 	{
-		position[0] = (parent->GWindow.GetWindow()->w * side) - (parent->GWindow.GetEighthW() * 0.9);
+		position[0] = (parent->GWindow.GetWidth() * side) - (parent->GWindow.GetEighthW() * 0.9);
 		direction[0] = 0;
 	}
 	ChangeDirection(0);
@@ -88,6 +88,7 @@ void Orc::ThrowAxe()
 	if (parent->totalTime - lastThrown > throwSpeed) 
 	{
 		throwing = true;
+		parent->PrintLog("passed this");
 		lastThrown = parent->totalTime;
 		AxeContainer->Spawn();
 		throwing = false;

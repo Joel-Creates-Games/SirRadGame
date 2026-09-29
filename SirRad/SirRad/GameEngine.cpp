@@ -15,7 +15,7 @@ GameEngine::GameEngine(SDL_Window* window)
     SoundPlayer.MusicLocationVector = { "Sounds/SirRadSong.ogg"};
     SoundPlayer.MusicVector.push_back(SoundPlayer.MixMusic(SoundPlayer.MusicLocationVector[0]));
     Mix_PlayMusic(SoundPlayer.MusicVector[0], 0);
-    GWindow = GameWindow(ImageRender.GetSurface(), this, window);
+    GWindow = GameWindow(this, window);
     Collider = new Collision();
     Collider->Init(this);
 
@@ -26,11 +26,11 @@ GameEngine::GameEngine(SDL_Window* window)
     //Splash();
 
     int speed = 0;
-    int size[2] = { GWindow.GetWindow()->w, GWindow.GetWindow()->h }; int pos[2] = { GWindow.GetWindow()->w / 2, GWindow.GetWindow()->h / 2 };
+    int size[2] = { GWindow.GetWidth(), GWindow.GetHeight()}; int pos[2] = {GWindow.GetWidth() / 2, GWindow.GetHeight() / 2};
     Background = new SplashRectangle(size, pos, &speed, "Images/Background.png");
     Background->Init(this);
 
-    int size2[2] = { 64, 64 }; int pos2[2] = { ImageRender.GetSurface()->w / 2,ImageRender.GetSurface()->h - (ImageRender.GetSurface()->h / 8) };
+    int size2[2] = { 64, 64 }; int pos2[2] = { GWindow.GetMiddleW(), GWindow.GetFloor()};
     //////////////Create Main Character
      SirRad = new Player(size2, pos2, &speed, "Images/SirRadSheet.png");
     SirRad->Init(this);
@@ -110,11 +110,11 @@ void GameEngine::Step()
     // Desktop frame-limiting delay
     if (TIME_STEP - aTimer.getTicks() < 0)
     {
-        PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
+        //PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
     }
     else
     {
-        PrintLog("FrameRate: 16.667");
+        //PrintLog("FrameRate: 16.667");
         SDL_Delay(TIME_STEP - aTimer.getTicks());
     }
     aTimer.resetTicksTimer();
