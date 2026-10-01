@@ -5,10 +5,14 @@ Enemy::Enemy(int _size[2], int _position[2], int* _speed, string _ImagePath, int
 {
 
 }
-
+/// <summary>
+/// this function wasn't virtual when I submitted it at uni
+/// this destructor actually needs to be virtual because when deleting the child objects the coliper must check
+/// to destroy something larger
+/// </summary>
 Enemy::~Enemy()
 {
-	parent->PrintLog("Enemy Unloaded");
+	engine->PrintLog("Enemy Unloaded");
 }
 
 void Enemy::Death()
@@ -35,11 +39,11 @@ bool Enemy::DetectCollision()
 
 void Enemy::CheckBoundaries()
 {
-	if ((position[0] < 0 - size[0]) || (position[0] > (parent->GWindow.GetWidth()) + size[0])) 
+	if ((position[0] < 0 - size[0]) || (position[0] > (engine->GWindow.GetWidth()) + size[0]))
 	{
 		Death();
 	}
-	if ((position[1] <= 0) || (position[1] > (parent->GWindow.GetHeight() + size[1])))
+	if ((position[1] <= 0) || (position[1] > (engine->GWindow.GetHeight() + size[1])))
 	{
 		Death();
 	}

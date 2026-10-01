@@ -5,11 +5,11 @@ GameWindow::GameWindow()
 {
 }
 
-GameWindow::GameWindow(GameEngine* _parent, SDL_Window* _screen)
+GameWindow::GameWindow(GameEngine* _engine, SDL_Window* _screen)
 {
 	Screen = _screen;
-	parent = _parent;
-	parent->PrintLog("Window stats calculated for functions");
+	engine = _engine;
+	engine->PrintLog("Window stats calculated for functions");
 	//gWindow = window;
 	SDL_GetWindowSize(Screen, &width, &height);
 	Screen_MiddleW = width / 2;
@@ -22,5 +22,5 @@ GameWindow::GameWindow(GameEngine* _parent, SDL_Window* _screen)
 
 GameWindow::~GameWindow()
 {
-	parent->PrintLog("GameWindow Unloaded");
+	engine->PrintLog("GameWindow Unloaded");
 }

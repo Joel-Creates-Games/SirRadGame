@@ -5,10 +5,10 @@
 #include <stdio.h>
 #include <string>
 
-ImageRenderer::ImageRenderer(SDL_Window* window, GameEngine* _parent)
+ImageRenderer::ImageRenderer(SDL_Window* window, GameEngine* _engine)
 {
-    parent = _parent;
-    parent->PrintLog("renderer created");
+    engine = _engine;
+    engine->PrintLog("renderer created");
     gWindow = window;
     renderer = SDL_CreateRenderer(gWindow, -1, 0);
 
@@ -17,7 +17,7 @@ ImageRenderer::ImageRenderer(SDL_Window* window, GameEngine* _parent)
 
 ImageRenderer::~ImageRenderer()
 {
-    parent->PrintLog("renderer Unloaded");
+    engine->PrintLog("renderer Unloaded");
 }
 
 bool ImageRenderer::Init()
@@ -29,19 +29,19 @@ bool ImageRenderer::Init()
     //if (SDL_Init(SDL_INIT_VIDEO) < 0)
     //{
     //    error = SDL_GetError();
-    //    parent->PrintLog("SDL could not initialize Renderer! SDL Error: " + error);
+    //    engine->PrintLog("SDL could not initialize Renderer! SDL Error: " + error);
     //    success = false;
     //}
     if (renderer == NULL) {
         error = SDL_GetError();
-        parent->PrintLog("Renderer was not created! SDL Error: " + error);
+        engine->PrintLog("Renderer was not created! SDL Error: " + error);
         return false;
     }
     //check window created
     if (gWindow == NULL)
     {
         error = SDL_GetError();
-        parent->PrintLog("Window was not created! SDL Error: " + error);
+        engine->PrintLog("Window was not created! SDL Error: " + error);
         return false;
     }
     //Initialize PNG loading
@@ -49,13 +49,13 @@ bool ImageRenderer::Init()
     if (!(IMG_Init(imgFlags) & imgFlags))
     {
         error = IMG_GetError();
-        parent->PrintLog("SDL_image could not initialize! SDL_image Error: " + error);
+        engine->PrintLog("SDL_image could not initialize! SDL_image Error: " + error);
         return false;
     }
     //Get window surface
-    parent->PrintLog("SDL_image was initialized! \n");
+    engine->PrintLog("SDL_image was initialized! \n");
     //gScreenSurface = SDL_GetWindowSurface(gWindow);
-    parent->PrintLog("renderer initialisation was successful");
+    engine->PrintLog("renderer initialisation was successful");
     SDL_GetRendererOutputSize(renderer, &rendererWidth, &rendererHeight);
 
     return true;
@@ -75,7 +75,7 @@ SDL_Surface* ImageRenderer::loadSurface(string path)
     //SDL_BlitSurface(loadedSurface, NULL, loadedSurface, NULL);
     if (loadedSurface == NULL)
     {
-        parent->PrintLog("Unable to load image " + path + "! SDL_image Error: " + IMG_GetError());
+        engine->PrintLog("Unable to load image " + path + "! SDL_image Error: " + IMG_GetError());
         return NULL;
     }
     ////Convert surface to screen format
@@ -84,9 +84,9 @@ SDL_Surface* ImageRenderer::loadSurface(string path)
     //optimizedSurface = SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
     //if (optimizedSurface == NULL)
     //{
-    //    parent->PrintLog("Unable to optimize image " + path + "! SDL Error: " + SDL_GetError());
+    //    engine->PrintLog("Unable to optimize image " + path + "! SDL Error: " + SDL_GetError());
     //}
-    parent->PrintLog("surface " + path + " was loaded");
+    engine->PrintLog("surface " + path + " was loaded");
 
     return loadedSurface;
 }

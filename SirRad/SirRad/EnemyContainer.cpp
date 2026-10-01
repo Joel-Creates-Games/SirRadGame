@@ -4,16 +4,19 @@
 #include "Orc.h"
 #include "Axe.h"
 
-EnemyContainer::EnemyContainer(int _count, EnemyTypes enemyType, float _spawnDelay, float _spawnWait, GameEngine* _parent)
+EnemyContainer::EnemyContainer(int _count, EnemyTypes enemyType, float _spawnDelay, float _spawnWait, GameEngine* _engine)
 {
-	parent = _parent;
-	parent->PrintLog("Enemy Container created");
-	//parent->enemyContainers.push_back(this);
+	engine = _engine;
+	engine->PrintLog("Enemy Container created");
+	//engine->enemyContainers.push_back(this);
 	CreateEnemies(_count, enemyType);
 	spawnDelay = _spawnDelay * 1000;
 	spawnWait = _spawnWait * 1000;
 }
-
+/// <summary>
+/// Write a copy constructor and copy assignment operator for the enemy container, this can be used to change the creation
+/// of my enemyContainers potentially
+/// </summary>
 EnemyContainer::~EnemyContainer()
 {
 	int length = containedEnemy.size();
@@ -21,7 +24,7 @@ EnemyContainer::~EnemyContainer()
 	{
 		delete containedEnemy[i];
 	}
-	parent->PrintLog("EnemyContainer Unloaded");
+	engine->PrintLog("EnemyContainer Unloaded");
 }
 
 void EnemyContainer::ControlContained()
@@ -39,7 +42,7 @@ void EnemyContainer::RenderContained()
 	for (int i = 0; i < containedEnemy.size(); i++)
 	{
 		if (containedEnemy[i]->GetSpawned()) {
-			parent->ImageRender.DrawCharacter(containedEnemy[i], &containedEnemy[i]->SpriteClips[containedEnemy[i]->CurrentSpriteClip]);
+			engine->ImageRender.DrawCharacter(containedEnemy[i], &containedEnemy[i]->SpriteClips[containedEnemy[i]->CurrentSpriteClip]);
 		}
 	}
 }
@@ -56,14 +59,14 @@ void EnemyContainer::AnimateContained()
 
 void EnemyContainer::Spawn()
 {
-	if ((parent->totalTime > spawnDelay) && ((parent->totalTime - lastSpawn) > spawnWait) || spawnWait == -1000) 
+	if ((engine->totalTime > spawnDelay) && ((engine->totalTime - lastSpawn) > spawnWait) || spawnWait == -1000)
 	{
 		for (int i = 0; i < containedEnemy.size(); i++)
 		{
 			if (!containedEnemy[i]->GetSpawned())
 			{
 				containedEnemy[i]->Spawn();
-				lastSpawn = parent->totalTime;
+				lastSpawn = engine->totalTime;
 				break;
 			}
 		}
@@ -92,12 +95,12 @@ void EnemyContainer::CreateEnemies(int _count, EnemyTypes enemyType)
 			newEnemy = new Axe();
 			break;
 		default:
-			parent->PrintLog("ERROR: not an enemy type");
+			engine->PrintLog("ERROR: not an enemy type");
 			break;
 		}
-		newEnemy->Init(parent);
+		newEnemy->Init(engine);
 
 		containedEnemy.push_back(newEnemy);
-		parent->PrintLog(newEnemy->name + " is " + to_string(containedEnemy.size()) + " in container");
+		engine->PrintLog(newEnemy->name + " is " + to_string(containedEnemy.size()) + " in container");
 	}
 }

@@ -1,34 +1,29 @@
 #include "GameOfLife.h"
 #include "GameEngine.h"
 
-GameOfLife::GameOfLife(GameEngine* _parent)
+GameOfLife::GameOfLife(GameEngine* _engine)
 {
-	parent = _parent;
+	engine = _engine;
 	CreateLife();
 }
 
-GameOfLife::GameOfLife(int width, int height, SDL_Renderer* _renderer, GameEngine* _parent)
+GameOfLife::GameOfLife(int width, int height, SDL_Renderer* _renderer, GameEngine* _engine)
 {
-	parent = _parent;
+	engine = _engine;
 	//CreateLife();
-	screenHeight = parent->GWindow.GetHeight();
-	screenWidth = parent->GWindow.GetWidth();
+	screenHeight = engine->GWindow.GetHeight();
+	screenWidth = engine->GWindow.GetWidth();
 	renderer = _renderer;
 	int speed = 0;
 	int size[2] = { (screenWidth / Xsize), (screenHeight / Ysize) }; int pos[2] = { 0, 0 };
 	LifeSquare = new SplashRectangle(size, pos, &speed, "None");
-	LifeSquare->Init(parent);
+	LifeSquare->Init(engine);
 }
 
 GameOfLife::~GameOfLife()
 {
 	cout << "GameOfLife Is Over!" << endl;
 	delete LifeSquare;
-}
-
-GameOfLife& GameOfLife::Create(int width, int height, SDL_Renderer* _renderer, GameEngine* _parent)
-{
-	return *(new GameOfLife(width, height, _renderer, _parent));
 }
 
 void GameOfLife::ScreenClick(int x, int y)

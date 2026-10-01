@@ -13,12 +13,12 @@ Orc::Orc() : Enemy(size, position, &speed, "Images/OrcSheet.png", 3)
 
 Orc::~Orc()
 {
-	parent->PrintLog("Orc destroyed");
+	engine->PrintLog("Orc destroyed");
 }
 
 bool Orc::Move()
 {
-	if (position[1] > parent->GWindow.GetRampTop() - parent->GWindow.GetEighthH()) 
+	if (position[1] > engine->GWindow.GetRampTop() - engine->GWindow.GetEighthH())
 	{
 		position[0] -= speed * direction[0];
 		position[1] -= speed * direction[1];
@@ -41,18 +41,18 @@ void Orc::Death()
 void Orc::Spawn()
 {
 	speed = 1;
-	AxeContainer = parent->enemyContainers[2];
+	AxeContainer = engine->enemyContainers[2];
 	int side = rand() % 2;
-	//position[0] = (parent->GWindow.GetWindow()->w * side) + (parent->GWindow.GetEighthW());
-	position[1] = (parent->GWindow.GetHeight());
+	//position[0] = (engine->GWindow.GetWindow()->w * side) + (engine->GWindow.GetEighthW());
+	position[1] = (engine->GWindow.GetHeight());
 	if (side == 0) 
 	{
-		position[0] = (parent->GWindow.GetWidth() * side) + (parent->GWindow.GetEighthW() * 0.9);
+		position[0] = (engine->GWindow.GetWidth() * side) + (engine->GWindow.GetEighthW() * 0.9);
 		direction[0] = 0;
 	}
 	else 
 	{
-		position[0] = (parent->GWindow.GetWidth() * side) - (parent->GWindow.GetEighthW() * 0.9);
+		position[0] = (engine->GWindow.GetWidth() * side) - (engine->GWindow.GetEighthW() * 0.9);
 		direction[0] = 0;
 	}
 	ChangeDirection(0);
@@ -60,7 +60,7 @@ void Orc::Spawn()
 	currentAnimation = 1;
 	currentFrame = 0;
 	isSpawned = true;
-	parent->PrintLog("Orc Spawned");
+	engine->PrintLog("Orc Spawned");
 }
 
 void Orc::Collide(Character* other)
@@ -73,7 +73,7 @@ void Orc::Collide(Character* other)
 
 void Orc::ChangeDirection(int direction)
 {
-	if (position[0] > parent->GWindow.GetMiddleW()) 
+	if (position[0] > engine->GWindow.GetMiddleW())
 	{
 		CharacterFlip = SDL_FLIP_NONE;
 	}
@@ -85,11 +85,10 @@ void Orc::ChangeDirection(int direction)
 
 void Orc::ThrowAxe()
 {
-	if (parent->totalTime - lastThrown > throwSpeed) 
+	if (engine->totalTime - lastThrown > throwSpeed)
 	{
 		throwing = true;
-		parent->PrintLog("passed this");
-		lastThrown = parent->totalTime;
+		lastThrown = engine->totalTime;
 		AxeContainer->Spawn();
 		throwing = false;
 	}

@@ -25,7 +25,7 @@ Character::Character(int _size [2], int _position [2], int* _speed, string _Imag
 /// </summary>
 Character::~Character()
 {
-	parent->PrintLog("Character Destroyed");
+	engine->PrintLog("Character Destroyed");
 }
 /// <summary>
 /// This virual Function is the basis of all movement of all characters in the game
@@ -42,27 +42,27 @@ void Character::Collide(Character* other)
 
 void Character::FindCollisionZone()
 {
-	parent->Collider->CalculateHitZone(this);
+	engine->Collider->CalculateHitZone(this);
 }
 
-void Character::Init(GameEngine* _parent)
+void Character::Init(GameEngine* _engine)
 {
-	parent = _parent;
-	parent->PrintLog(name + " initiated");
+	engine = _engine;
+	engine->PrintLog(name + " initiated");
 	if (ImagePath != "None") {
 		//Uint32 colorkey = SDL_MapRGB(character_Surface->format, 0, 0, 0xff);
 		//SDL_SetColorKey(character_Surface, SDL_TRUE, colorkey);
-		character_Surface = parent->ImageRender.loadSurface(ImagePath);
+		character_Surface = engine->ImageRender.loadSurface(ImagePath);
 		Uint32 colorkey = SDL_MapRGB(character_Surface->format, 0, 0, 0);
 		SDL_SetColorKey(character_Surface, SDL_TRUE, colorkey);
-		image_Texture = SDL_CreateTextureFromSurface(parent->ImageRender.GetRenderer(), character_Surface);
+		image_Texture = SDL_CreateTextureFromSurface(engine->ImageRender.GetRenderer(), character_Surface);
 		if (image_Texture != NULL && spriteRows != 0) 
 		{
 			LoadSprites();
 		}
 		SDL_FreeSurface(character_Surface);
 	}
-	parent->allcharacters.push_back(this);
+	engine->allcharacters.push_back(this);
 }
 
 void Character::ChangeDirection(int _direction)
@@ -71,20 +71,20 @@ void Character::ChangeDirection(int _direction)
 
 void Character::Animate()
 {
-	if ((parent->totalTime - lastFrame) <= 250) { return; }
+	if ((engine->totalTime - lastFrame) <= 250) { return; }
 	CurrentSpriteClip = (((currentAnimation - 1) * 4) + currentFrame);
 	currentFrame++;
 	if (currentFrame == 4) {
 		currentFrame = 0;
 	}
-	lastFrame = parent->totalTime;
+	lastFrame = engine->totalTime;
 }
 
 void Character::LoadSprites()
 {
-	if (image_Texture == NULL) { parent->PrintLog("ERROR: no texture for spritesheet creation"); return;}
-		//int width = parent->ImageRender.loadSurface(ImagePath)->w / 4;
-		//int height = parent->ImageRender.loadSurface(ImagePath)->h/spriteRows;
+	if (image_Texture == NULL) { engine->PrintLog("ERROR: no texture for spritesheet creation"); return;}
+		//int width = engine->ImageRender.loadSurface(ImagePath)->w / 4;
+		//int height = engine->ImageRender.loadSurface(ImagePath)->h/spriteRows;
 	SDL_Rect printRect;
 	for (int i = 0; i < spriteRows; i++)
 	{
@@ -97,5 +97,5 @@ void Character::LoadSprites()
 			SpriteClips.push_back(printRect);
 		}
 	}
-	parent->PrintLog("sprites for " + ImagePath + " loaded");
+	engine->PrintLog("sprites for " + ImagePath + " loaded");
 }

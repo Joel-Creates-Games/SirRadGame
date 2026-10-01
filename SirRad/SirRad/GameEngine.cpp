@@ -19,9 +19,7 @@ GameEngine::GameEngine(SDL_Window* window)
     Collider = new Collision();
     Collider->Init(this);
 
-    //PrintLog("splash screen is running");
     splashLife = new GameOfLife(100, 100, ImageRender.GetRenderer(), this);
-    &splashLife->Create(100,100, ImageRender.GetRenderer(), this);
     SDL_RenderSetLogicalSize(ImageRender.GetRenderer(), 800, 450);
     //Splash();
 
@@ -34,9 +32,19 @@ GameEngine::GameEngine(SDL_Window* window)
     //////////////Create Main Character
     SirRad = new Player(size2, pos2, &speed, "Images/SirRadSheet.png");
     SirRad->Init(this);
-    enemyContainers.push_back(new EnemyContainer(10, EnemyContainer::fireball, 21.5, 1.25, this));
-    enemyContainers.push_back(new EnemyContainer(10, EnemyContainer::orc, 30, 5, this));
-    enemyContainers.push_back(new EnemyContainer(10, EnemyContainer::axe, -1, -1, this));
+
+    //pool_size, enemy type, spawn delay/time before start spawning, spawn rate, gameEngine
+    int poolSize = 10; 
+    const float fireballSpawnDelay = 21.5f;
+    const float fireballSpawnRate = 1.25f;
+    enemyContainers.push_back(new EnemyContainer(poolSize, EnemyContainer::fireball, fireballSpawnDelay, fireballSpawnRate, this));
+    const float orcSpawnDelay = 30.0f;
+    const float orcSpawnRate = 5.0f;
+    enemyContainers.push_back(new EnemyContainer(poolSize, EnemyContainer::orc, orcSpawnDelay, orcSpawnRate, this));
+    //these are spawned within orc
+    const float axeSpawnDelay = -1;
+    const float axeSpawnGap = -1;
+    enemyContainers.push_back(new EnemyContainer(poolSize, EnemyContainer::axe, axeSpawnDelay, axeSpawnGap, this));
     TTF_Init();
     Sans = TTF_OpenFont("Text/RujisHandwritingFontV20-vrqZ.ttf", 24);
     Message_rect.x = 0;

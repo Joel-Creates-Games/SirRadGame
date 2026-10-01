@@ -12,7 +12,7 @@ SplashRectangle::SplashRectangle(int _size[2], int _position[2], int* _speed, st
 
 SplashRectangle::~SplashRectangle()
 {
-	parent->PrintLog("rectangle Unloaded");
+	engine->PrintLog("rectangle Unloaded");
 }
 
 bool SplashRectangle::Move()

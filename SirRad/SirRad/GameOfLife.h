@@ -10,10 +10,11 @@ class GameEngine;
 class GameOfLife
 {
 public:
-	GameOfLife(GameEngine* _parent);
-	GameOfLife(int width, int height, SDL_Renderer* _renderer, GameEngine* _parent);
+	GameOfLife(GameEngine* _engine);
+	GameOfLife(int width, int height, SDL_Renderer* _renderer, GameEngine* _engine);
 	~GameOfLife();
-	GameOfLife& Create(int width, int height, SDL_Renderer* _renderer, GameEngine* _parent);
+	GameOfLife(const GameOfLife& copy) = delete;
+	GameOfLife& operator=(const GameOfLife&) = delete;
 	void ScreenClick(int x, int y);
 	void DrawLife();
 	void DrawCharacter(Character* draw);
@@ -127,7 +128,7 @@ private:
 		{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 	};
 	SDL_Renderer* renderer;
-	GameEngine* parent;
+	GameEngine* engine;
 	SplashRectangle* LifeSquare;
 };
 #endif

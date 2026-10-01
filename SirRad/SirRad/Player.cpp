@@ -17,7 +17,7 @@ Player::Player(int _size[2], int _position[2], int* _speed, string _ImagePath) :
 
 Player::~Player()
 {
-	parent->PrintLog("SirRad Is Gone! (unloaded)");
+	engine->PrintLog("SirRad Is Gone! (unloaded)");
 }
 /// <summary>
 /// The player moves from left to right taking into account it's x value to determine it's direction and rotation
@@ -36,12 +36,12 @@ bool Player::Move()
 void Player::Movement(bool moveLeft, bool moveRight)
 {
 	//cout << position[1] << endl;
-	if (position[1] <= parent->GWindow.GetRampTop()) {
+	if (position[1] <= engine->GWindow.GetRampTop()) {
 		velocity.Y -= 0.5f;
 		velocity.X = 0;
 		return;
 	}
-	if (position[0] < parent->GWindow.GetMiddleW() + parent->GWindow.GetEighthW() && position[0] > parent->GWindow.GetMiddleW() - parent->GWindow.GetEighthW()) {///////////MIDDLE
+	if (position[0] < engine->GWindow.GetMiddleW() + engine->GWindow.GetEighthW() && position[0] > engine->GWindow.GetMiddleW() - engine->GWindow.GetEighthW()) {///////////MIDDLE
 		ChangeMoveZone(0);
 		if (moveRight && velocity.X < 15) {
 			velocity.X += 1;
@@ -55,10 +55,10 @@ void Player::Movement(bool moveLeft, bool moveRight)
 		else if (!moveRight && velocity.X < 0 && rand() % 10 <= 1) {
 			velocity.X += 1;
 		}
-		position[1] = parent->ImageRender.GetRendererHeight() - (parent->ImageRender.GetRendererHeight() / 8);
+		position[1] = engine->ImageRender.GetRendererHeight() - (engine->ImageRender.GetRendererHeight() / 8);
 		velocity.Y = 0;
 	}
-	if (position[0] > parent->GWindow.GetMiddleW() + (parent->GWindow.GetEighthW()/2)) /////////Right Side
+	if (position[0] > engine->GWindow.GetMiddleW() + (engine->GWindow.GetEighthW()/2)) /////////Right Side
 	{
 		ChangeMoveZone(1);
 		if (velocity.X > 0) {
@@ -70,7 +70,7 @@ void Player::Movement(bool moveLeft, bool moveRight)
 			velocity.Y = velocity.Y - 1;
 		}
 		if (velocity.Y < 0) {
-			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1)))/2) >= abs(position[1] - parent->GWindow.GetFloor())) {
+			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1)))/2) >= abs(position[1] - engine->GWindow.GetFloor())) {
 				velocity.Y = velocity.Y + 1;
 				velocity.X = velocity.X - 1;
 			}
@@ -79,7 +79,7 @@ void Player::Movement(bool moveLeft, bool moveRight)
 			}
 		}
 	}
-	if (position[0] < parent->GWindow.GetMiddleW() - (parent->GWindow.GetEighthW()/2)) { /////////////////////LEFT SIDE
+	if (position[0] < engine->GWindow.GetMiddleW() - (engine->GWindow.GetEighthW()/2)) { /////////////////////LEFT SIDE
 		ChangeMoveZone(1);
 		if (velocity.X < 0) {
 			//cout << speedUp << endl;
@@ -90,7 +90,7 @@ void Player::Movement(bool moveLeft, bool moveRight)
 			velocity.Y = velocity.Y - 1;
 		}
 		if (velocity.Y < 0) {
-			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1))) / 2) >= abs(position[1] - parent->GWindow.GetFloor())) {
+			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1))) / 2) >= abs(position[1] - engine->GWindow.GetFloor())) {
 				velocity.Y = velocity.Y + 1;
 				velocity.X = velocity.X + 1;
 			}
@@ -128,11 +128,11 @@ void Player::Collide(Character* other)
 void Player::SetRotation()
 {
 
-	if (position[0] > parent->GWindow.GetMiddleW() + (parent->GWindow.GetEighthW() / 2)) /////////Right Side
+	if (position[0] > engine->GWindow.GetMiddleW() + (engine->GWindow.GetEighthW() / 2)) /////////Right Side
 	{
 		Rotation = 0 - abs((15-abs(velocity.X))* 6);
 	}
-	else if (position[0] < parent->GWindow.GetMiddleW() - (parent->GWindow.GetEighthW() / 2))
+	else if (position[0] < engine->GWindow.GetMiddleW() - (engine->GWindow.GetEighthW() / 2))
 	{
 		Rotation = abs((15 - abs(velocity.X)) * 6);
 	}
@@ -144,7 +144,7 @@ void Player::SetRotation()
 
 void Player::Animate()
 {
-	if ((parent->totalTime - lastFrame) > 100)
+	if ((engine->totalTime - lastFrame) > 100)
 	{
 		CurrentSpriteClip = (((currentAnimation - 1) * 4) + currentFrame);
 		currentFrame++;
@@ -155,16 +155,16 @@ void Player::Animate()
 				switch (currentAnimation)
 				{
 				case 3:
-					parent->ChangeScore(200);
-					parent->PrintLog("Ollie! + 200 score!");
+					engine->ChangeScore(200);
+					engine->PrintLog("Ollie! + 200 score!");
 					break;
 				case 4:
-					parent->ChangeScore(1000);
-					parent->PrintLog("Christ! + 1000 Score!");
+					engine->ChangeScore(1000);
+					engine->PrintLog("Christ! + 1000 Score!");
 					break;
 				case 5:
-					parent->ChangeScore(1000);
-					parent->PrintLog("Flip! + 1000 Score!");
+					engine->ChangeScore(1000);
+					engine->PrintLog("Flip! + 1000 Score!");
 					break;
 				default:
 					break;
@@ -174,7 +174,7 @@ void Player::Animate()
 				trickType = 0;
 			}
 		}
-		lastFrame = parent->totalTime;
+		lastFrame = engine->totalTime;
 	}
 }
 
@@ -183,7 +183,7 @@ void Player::DoTrick(int trick)
 	if (!performingTrick)
 	{
 		trickType = trick;
-		if (position[1] > parent->GWindow.GetRampTop() && (trick == 4 || trick == 5)) 
+		if (position[1] > engine->GWindow.GetRampTop() && (trick == 4 || trick == 5))
 		{
 			return;
 		}

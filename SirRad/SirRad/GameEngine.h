@@ -28,6 +28,8 @@ class GameEngine
 public:
 	GameEngine(SDL_Window* window); ///constructor
 	~GameEngine(); //destructor
+	GameEngine(const GameEngine& copy) = delete;
+	GameEngine& operator=(const GameEngine&) = delete;
 	SDL_Surface* screenSurface;
 	GameWindow GWindow;
 	ImageRenderer ImageRender;

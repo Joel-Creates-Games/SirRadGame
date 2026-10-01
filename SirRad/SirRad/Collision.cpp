@@ -7,20 +7,20 @@ Collision::Collision()
 
 Collision::~Collision()
 {
-	parent->PrintLog("Character Unloaded");
+	engine->PrintLog("Character Unloaded");
 }
 
-void Collision::Init(GameEngine* _parent)
+void Collision::Init(GameEngine* _engine)
 {
-	parent = _parent;
-	parent->PrintLog("Collision initiated");
+	engine = _engine;
+	engine->PrintLog("Collision initiated");
 	spatialGrid.resize(hitZoneDepth * hitZoneDepth);
 }
 
 void Collision::CalculateHitZone(Character* thisChar)
 {
-	int zoneWidth = parent->GWindow.GetWidth() / hitZoneDepth;
-	int zoneHeight = parent->GWindow.GetHeight() / hitZoneDepth;
+	int zoneWidth = engine->GWindow.GetWidth() / hitZoneDepth;
+	int zoneHeight = engine->GWindow.GetHeight() / hitZoneDepth;
 
 	int gridX = thisChar->GetPosX() / zoneWidth;
 	int gridY = thisChar->GetPosY() / zoneHeight;
@@ -41,8 +41,8 @@ void Collision::UpdateGrid()
 		spatialGrid[i].clear();
 	}
 
-	for (size_t i = 0; i < parent->allcharacters.size(); i++) {
-		Character* c = parent->allcharacters[i];
+	for (size_t i = 0; i < engine->allcharacters.size(); i++) {
+		Character* c = engine->allcharacters[i];
 		if (!c->GetSpawned()) continue;
 
 		CalculateHitZone(c);

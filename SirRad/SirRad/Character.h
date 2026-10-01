@@ -16,21 +16,21 @@ public:
 	Character(int _size[2], int _position[2], int* _speed, string _ImagePath, int _spriteRows = NULL);
 	virtual ~Character();
 	virtual bool Move();
-	int GetSizeW() { return size[0]; }
-	int GetSizeH() { return size[1]; }
-	int GetPosX() { return position[0]; }
-	int GetPosY() { return position[1]; }
+	int GetSizeW() const { return size[0]; }
+	int GetSizeH() const { return size[1]; }
+	int GetPosX() const { return position[0]; }
+	int GetPosY() const { return position[1]; }
 	int collisionZone[2];
 	virtual void Collide(Character* other);
 	void FindCollisionZone();
-	SDL_Surface* GetSurface() { return character_Surface; }
-	virtual void Init(GameEngine* _parent);
-	string GetImagePath() { return ImagePath; }
-	GameEngine* parent;
+	SDL_Surface* GetSurface() const { return character_Surface; }
+	virtual void Init(GameEngine* _engine);
+	const string GetImagePath() const { return ImagePath; }
+	GameEngine* engine;
 	SDL_Surface* character_Surface;
 	SDL_Texture* image_Texture;
 	virtual void ChangeDirection(int _direction);
-	bool GetSpawned() { return isSpawned; };
+	bool GetSpawned() const { return isSpawned; };
 
 	///FOR SPRITES
 	int spriteRows = 1;

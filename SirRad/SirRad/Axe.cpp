@@ -11,7 +11,7 @@ Axe::Axe() : Enemy(size, position, &speed, "Images/AxeSheet.png", 1)
 
 Axe::~Axe()
 {
-	parent->PrintLog("Axe Destroyed");
+	engine->PrintLog("Axe Destroyed");
 }
 
 bool Axe::Move()
@@ -32,13 +32,13 @@ void Axe::Death()
 void Axe::Spawn()
 {
 	speed = 1;
-	OrcContainer = parent->enemyContainers[1];
+	OrcContainer = engine->enemyContainers[1];
 	for (int i = 0; i < OrcContainer->GetContainedEnemy().size(); i++)
 	{
-		if (!OrcContainer->GetContainedEnemy()[i]->GetThrowing()) { return; }
+		if (!OrcContainer->GetContainedEnemy()[i]->GetThrowing()) { continue; }
 		position[0] = OrcContainer->GetContainedEnemy()[i]->GetPosX();
 		position[1] = OrcContainer->GetContainedEnemy()[i]->GetPosY();
-		if (OrcContainer->GetContainedEnemy()[i]->GetPosX() < parent->GWindow.GetMiddleW())
+		if (OrcContainer->GetContainedEnemy()[i]->GetPosX() < engine->GWindow.GetMiddleW())
 		{
 			direction[0] = -1;
 		}
@@ -49,7 +49,7 @@ void Axe::Spawn()
 		direction[1] = 3;
 		axeHit = false;
 		isSpawned = true;
-		parent->PrintLog("Axe Spawned");
+		engine->PrintLog("Axe Spawned");
 		break;
 	}
 }
@@ -60,15 +60,15 @@ void Axe::Collide(Character* other)
 	if (other->name == "SirRad")
 	{
 		axeHit = true;
-		if (parent->SirRad->performingTrick) 
+		if (engine->SirRad->performingTrick)
 		{
-			parent->PrintLog("dodged with trick! + 500 score!");
-			parent->ChangeScore(500);
+			engine->PrintLog("dodged with trick! + 500 score!");
+			engine->ChangeScore(500);
 		}
 		else 
 		{
-			parent->PrintLog("Axe Hit! - 300 score!");
-			parent->ChangeScore(-300);
+			engine->PrintLog("Axe Hit! - 300 score!");
+			engine->ChangeScore(-300);
 			Death();
 		}
 	}

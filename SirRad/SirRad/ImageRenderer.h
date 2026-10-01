@@ -7,21 +7,21 @@
 class ImageRenderer
 {
 public:
-	ImageRenderer(SDL_Window* window, GameEngine* _parent);
+	ImageRenderer(SDL_Window* window, GameEngine* _engine);
 	~ImageRenderer();
 	bool Init();
-	SDL_Surface* GetSurface() { return gScreenSurface; };
-	SDL_Renderer* GetRenderer() { return renderer; };
-	SDL_Window* GetWindow() { return gWindow; };
+	SDL_Surface* GetSurface() const { return gScreenSurface; };
+	SDL_Renderer* GetRenderer() const { return renderer; };
+	SDL_Window* GetWindow() const { return gWindow; };
 	SDL_Surface* loadSurface(std::string path);
 	void DrawCharacter(Character* draw, SDL_Rect* clip = NULL);
-	int GetRendererHeight() { return rendererHeight; }
-	int GetRendererWidth() { return rendererWidth; }
+	int GetRendererHeight() const { return rendererHeight; }
+	int GetRendererWidth() const { return rendererWidth; }
 private:
 	SDL_Renderer* renderer;
 	SDL_Window* gWindow;
 	SDL_Surface* gScreenSurface;
-	GameEngine* parent;
+	GameEngine* engine;
 
 	int rendererHeight;
 	int rendererWidth;

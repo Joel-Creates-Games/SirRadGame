@@ -10,7 +10,7 @@ Fireball::Fireball() : Enemy(size, position, &speed, "Images/FireballSheet.png",
 
 Fireball::~Fireball()
 {
-	parent->PrintLog("Fireball Destroyed");
+	engine->PrintLog("Fireball Destroyed");
 }
 
 bool Fireball::Move()
@@ -31,20 +31,20 @@ void Fireball::Spawn()
 {
 	speed = 5;
 	int side = rand() % 2;
-	position[0] = (parent->GWindow.GetWidth() * side) - (size[0] * side);
-	position[1] = (rand() % parent->GWindow.GetHeight());
-	direction[0] = (((float)position[0] - (float)parent->SirRad->GetPosX()) / (float)parent->GWindow.GetWidth());
-	direction[1] = (((float)position[1] - (float)parent->SirRad->GetPosY()) / (float)parent->GWindow.GetHeight());
+	position[0] = (engine->GWindow.GetWidth() * side) - (size[0] * side);
+	position[1] = (rand() % engine->GWindow.GetHeight());
+	direction[0] = (((float)position[0] - (float)engine->SirRad->GetPosX()) / (float)engine->GWindow.GetWidth());
+	direction[1] = (((float)position[1] - (float)engine->SirRad->GetPosY()) / (float)engine->GWindow.GetHeight());
 	currentAnimation = 1;
 	currentFrame = 0;
 	isSpawned = true;
 	hit = false;
-	parent->PrintLog("Fireball Spawned");
+	engine->PrintLog("Fireball Spawned");
 }
 
 void Fireball::Animate()
 {
-	if ((parent->totalTime - lastFrame) > 100)
+	if ((engine->totalTime - lastFrame) > 100)
 	{
 		CurrentSpriteClip = (((currentAnimation - 1) * 4) + currentFrame);
 		currentFrame++;
@@ -55,7 +55,7 @@ void Fireball::Animate()
 				Death();
 			}
 		}
-		lastFrame = parent->totalTime;
+		lastFrame = engine->totalTime;
 	}
 }
 
@@ -71,15 +71,15 @@ void Fireball::Collide(Character* other)
 {
 	if (other->name == "SirRad" && !hit) {
 		hit = true;
-		if (parent->SirRad->performingTrick)
+		if (engine->SirRad->performingTrick)
 		{
-			parent->PrintLog("dodged with trick + 500 score!");
-			parent->ChangeScore(500);
+			engine->PrintLog("dodged with trick + 500 score!");
+			engine->ChangeScore(500);
 		}
 		else
 		{
-			parent->PrintLog("Fireball Hit - 300 score!");
-			parent->ChangeScore(-300);
+			engine->PrintLog("Fireball Hit - 300 score!");
+			engine->ChangeScore(-300);
 			currentAnimation = 2;
 			speed = 0;
 		}

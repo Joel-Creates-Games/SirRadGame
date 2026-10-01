@@ -3,15 +3,15 @@
 SZ_Timer::SZ_Timer()
 {
 }
-SZ_Timer::SZ_Timer(GameEngine* _parent)
+SZ_Timer::SZ_Timer(GameEngine* _engine)
 {
-	parent = _parent;
-	parent->PrintLog("SZ_Timer was created, thanks Olivier!");
+	engine = _engine;
+	engine->PrintLog("SZ_Timer was created, thanks Olivier!");
 	startTicks = 0;
 }
 SZ_Timer::~SZ_Timer()
 {
-	parent->PrintLog("SZ_Timer Unloaded");
+	engine->PrintLog("SZ_Timer Unloaded");
 }
 ;
 void SZ_Timer::resetTicksTimer()

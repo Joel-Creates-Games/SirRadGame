@@ -10,8 +10,8 @@ class Collision
 public:
 	Collision();
 	~Collision();
-	void Init(GameEngine* _parent);
-	GameEngine* parent;
+	void Init(GameEngine* _engine);
+	GameEngine* engine;
 	void CalculateHitZone(Character* thisChar);
 	void CheckCollision(Character* thisChar);
 	void UpdateGrid();

@@ -11,7 +11,7 @@ class GameEngine;
 class SoundPlayer
 {
 public:
-	SoundPlayer(GameEngine* _parent);
+	SoundPlayer(GameEngine* _engine);
 	~SoundPlayer();
 	Mix_Music* MixMusic(std::string location);
 	std::vector<Mix_Music*> MusicVector = {};
@@ -19,7 +19,7 @@ public:
 
 private:
 	void Init();
-	GameEngine* parent;
+	GameEngine* engine;
 };
 #endif
 
