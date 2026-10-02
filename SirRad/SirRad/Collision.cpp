@@ -69,11 +69,10 @@ void Collision::CheckCollision(Character* thisChar)
 		Character* other = localZone[i];
 
 		if (other == thisChar) continue;
-
-		int listLX = other->GetPosX() - other->GetSizeW() / 2;
-		int listRX = other->GetPosX() + other->GetSizeW() / 2;
-		int listTY = other->GetPosY() - other->GetSizeH() / 2;
-		int listBY = other->GetPosY() + other->GetSizeH() / 2;
+		int listLX = other->GetPosX();
+		int listRX = other->GetPosX() + other->GetSizeW();
+		int listTY = other->GetPosY();
+		int listBY = other->GetPosY() + other->GetSizeH();
 
 		if (thisRX > listLX && thisLX < listRX && thisTY < listBY && thisBY > listTY)
 		{

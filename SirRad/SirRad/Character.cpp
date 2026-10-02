@@ -10,7 +10,7 @@ Character::Character()
 /// <summary>
 /// this constructor sets character statistics
 /// </summary>
-Character::Character(int _size [2], int _position [2], int* _speed, string _ImagePath, int _spriteRows)
+Character::Character(int _size[2], int _position[2], int* _speed, const string& _ImagePath, int _spriteRows)
 {
 	size[0] = _size[0]; size[1] = _size[1];
 	position[0] = _position[0]; position[1] = _position[1];

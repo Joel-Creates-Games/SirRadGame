@@ -11,14 +11,14 @@ public:
 	Collision();
 	~Collision();
 	void Init(GameEngine* _engine);
-	GameEngine* engine;
 	void CalculateHitZone(Character* thisChar);
 	void CheckCollision(Character* thisChar);
 	void UpdateGrid();
 private:
-	int hitZoneDepth = 3;
+	GameEngine* engine;
 	std::vector<int> hitZonesX;
 	std::vector<int> hitZonesY;
 	std::vector<std::vector<Character*>> spatialGrid;
+	int hitZoneDepth = 3;
 };
 #endif

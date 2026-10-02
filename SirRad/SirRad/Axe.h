@@ -14,8 +14,8 @@ public:
     void Death() override;
     void Spawn() override;
     void Collide(Character* other) override;
-    EnemyContainer* OrcContainer;
 private:
+    EnemyContainer* OrcContainer;
     bool axeHit = false;
 };
 #endif
