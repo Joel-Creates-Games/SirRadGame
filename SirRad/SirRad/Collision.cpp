@@ -15,12 +15,12 @@ void Collision::Init(GameEngine* _engine)
 	engine = _engine;
 	engine->PrintLog("Collision initiated");
 	spatialGrid.resize(hitZoneDepth * hitZoneDepth);
+	zoneWidth = engine->GWindow.GetWidth() / hitZoneDepth;
+	zoneHeight = engine->GWindow.GetHeight() / hitZoneDepth;
 }
 
 void Collision::CalculateHitZone(Character* thisChar)
 {
-	int zoneWidth = engine->GWindow.GetWidth() / hitZoneDepth;
-	int zoneHeight = engine->GWindow.GetHeight() / hitZoneDepth;
 
 	int gridX = thisChar->GetPosX() / zoneWidth;
 	int gridY = thisChar->GetPosY() / zoneHeight;
@@ -46,7 +46,7 @@ void Collision::UpdateGrid()
 		if (!c->GetSpawned()) continue;
 
 		CalculateHitZone(c);
-
+		///flattening a 2d grid to a 1d array index for cache locality
 		int bucketIndex = c->collisionZone[0] + (c->collisionZone[1] * hitZoneDepth);
 
 		spatialGrid[bucketIndex].push_back(c);

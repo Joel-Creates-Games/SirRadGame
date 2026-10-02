@@ -20,5 +20,7 @@ private:
 	std::vector<int> hitZonesY;
 	std::vector<std::vector<Character*>> spatialGrid;
 	int hitZoneDepth = 3;
+	int zoneWidth;
+	int zoneHeight;
 };
 #endif
