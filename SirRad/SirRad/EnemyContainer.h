@@ -23,6 +23,7 @@ public:
 private:
 	void CreateEnemies(int _count, EnemyTypes enemyType);
 	GameEngine* engine;
+private:
 	std::vector<Enemy*> containedEnemy;
 	float lastSpawn = 0;
 	float spawnDelay;

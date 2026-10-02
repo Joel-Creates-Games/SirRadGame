@@ -7,6 +7,7 @@ class Fireball :
 public:
     Fireball();
     ~Fireball();
+private:
     bool Move() override;
     void Death() override;
     void Spawn() override;
@@ -14,8 +15,8 @@ public:
     void Damage() override;
     void Collide(Character* other) override;
     void Animate() override;
-    bool hit = false;
 private:
+    bool hit = false;
 };
 #endif
 
