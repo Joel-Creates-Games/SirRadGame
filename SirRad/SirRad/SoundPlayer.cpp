@@ -25,6 +25,11 @@ Mix_Music* SoundPlayer::MixMusic(std::string location)
     return loadSound;
 }
 
+void SoundPlayer::AddMusic(string location)
+{
+    SetMusicVector(location);
+}
+
 void SoundPlayer::Init()
 {
     string error;

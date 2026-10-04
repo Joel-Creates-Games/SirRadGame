@@ -71,7 +71,7 @@ void Fireball::Collide(Character* other)
 {
 	if (other->name == "SirRad" && !hit) {
 		hit = true;
-		if (engine->SirRad->performingTrick)
+		if (engine->SirRad->GetPerformingtrick())
 		{
 			engine->PrintLog("dodged with trick + 500 score!");
 			engine->ChangeScore(500);

@@ -12,9 +12,10 @@ GameEngine::GameEngine(SDL_Window* window)
     aTimer(this)
 {
     SDL_SetRelativeMouseMode(SDL_TRUE);
-    SoundPlayer.MusicLocationVector = { "Sounds/SirRadSong.ogg"};
-    SoundPlayer.MusicVector.push_back(SoundPlayer.MixMusic(SoundPlayer.MusicLocationVector[0]));
-    Mix_PlayMusic(SoundPlayer.MusicVector[0], 0);
+    SoundPlayer.AddMusic("Sounds/SirRadSong.ogg");
+    //SoundPlayer.SetMusicLocationVector({ "Sounds/SirRadSong.ogg" });
+    //SoundPlayer.SetMusicVector(SoundPlayer.GetMusicLocationVector());// .push_back(SoundPlayer.MixMusic(SoundPlayer.MusicLocationVector[0]));
+    Mix_PlayMusic(SoundPlayer.GetMusicVector()[0], 0);
     GWindow = GameWindow(this, window);
     Collider = new Collision();
     Collider->Init(this);
@@ -164,13 +165,13 @@ void GameEngine::Input()
                 //PrintLog("a pressed to move left");
                 MoveLeft = true;
                 SirRad->currentAnimation = 2;
-                SirRad->performingTrick = false;
+                SirRad->SetPerformingTrick(false);
                 break;
             case SDLK_d:
                 //PrintLog("d pressed to move right");
                 MoveRight = true;
                 SirRad->currentAnimation = 2;
-                SirRad->performingTrick = false;
+                SirRad->SetPerformingTrick(false);
                 break;
             case SDLK_q:
                 //PrintLog("q pressed to ollie");

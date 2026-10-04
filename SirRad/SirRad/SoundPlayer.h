@@ -14,11 +14,14 @@ public:
 	SoundPlayer(GameEngine* _engine);
 	~SoundPlayer();
 	Mix_Music* MixMusic(std::string location);
-	std::vector<Mix_Music*> MusicVector = {};
-	std::vector<std::string> MusicLocationVector = {};
+	void AddMusic(std::string location);
+	const std::vector<Mix_Music*> GetMusicVector() const { return MusicVector; }
 
 private:
 	void Init();
+	void SetMusicVector(std::string mix) { MusicVector.push_back(MixMusic(mix)); }
+private:
+	std::vector<Mix_Music*> MusicVector = {};
 	GameEngine* engine;
 };
 #endif

@@ -23,6 +23,7 @@ public:
 private:
 	SDL_Window* Screen;
 	SDL_Surface* gWindow;
+	GameEngine* engine;
 	int Screen_MiddleW;
 	int Screen_MiddleH;
 	int Screen_EighthW;
@@ -31,6 +32,5 @@ private:
 	int rampTop;
 	int height;
 	int width;
-	GameEngine* engine;
 };
 #endif

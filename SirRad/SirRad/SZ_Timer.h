@@ -8,9 +8,6 @@ class GameEngine;
 
 class SZ_Timer
 {
-private:
-	int startTicks; // SDL time when the timer started
-	GameEngine* engine;
 public:
 	SZ_Timer();
 	SZ_Timer(GameEngine* _engine);
@@ -18,5 +15,8 @@ public:
 	//SDL timer stuff
 	void resetTicksTimer(); // resets timer to zero
 	int getTicks(); // returns how much time has passed since timer has been reset
+private:
+	GameEngine* engine;
+	int startTicks; // SDL time when the timer started
 };
 #endif

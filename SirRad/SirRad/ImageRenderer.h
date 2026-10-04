@@ -9,7 +9,6 @@ class ImageRenderer
 public:
 	ImageRenderer(SDL_Window* window, GameEngine* _engine);
 	~ImageRenderer();
-	bool Init();
 	SDL_Surface* GetSurface() const { return gScreenSurface; };
 	SDL_Renderer* GetRenderer() const { return renderer; };
 	SDL_Window* GetWindow() const { return gWindow; };
@@ -17,6 +16,8 @@ public:
 	void DrawCharacter(Character* draw, SDL_Rect* clip = NULL);
 	int GetRendererHeight() const { return rendererHeight; }
 	int GetRendererWidth() const { return rendererWidth; }
+private:
+	bool Init();
 private:
 	SDL_Renderer* renderer;
 	SDL_Window* gWindow;

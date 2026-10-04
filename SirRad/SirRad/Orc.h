@@ -10,13 +10,14 @@ class Orc :
 public:
     Orc();
     ~Orc();
+private:
     bool Move() override;
     void Death() override;
     void Spawn() override;
     void Collide(Character* other) override;
     void ChangeDirection(int direction) override;
-private:
     void ThrowAxe();
+private:
     float lastThrown = 0;
     float throwSpeed = 1800;
     EnemyContainer* AxeContainer;

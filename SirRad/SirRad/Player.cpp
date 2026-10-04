@@ -10,8 +10,8 @@ Player::Player(int _size[2], int _position[2], int* _speed, string _ImagePath) :
 	name = "SirRad";
 	speedUp = 0;
 	MoveZone = 1;
-	velocity.X = 0;
-	velocity.Y = 0;
+	velocity.SetX(0);
+	velocity.SetY(0);
 	isSpawned = true;
 }
 
@@ -26,8 +26,8 @@ Player::~Player()
 /// <returns>whether the character was able to move</returns>
 bool Player::Move()
 {
-	position[0] += velocity.X;
-	position[1] -= velocity.Y;
+	position[0] += velocity.GetX();
+	position[1] -= velocity.GetY();
 	FindCollisionZone();
 	SetRotation();
 	return false;
@@ -37,65 +37,65 @@ void Player::Movement(bool moveLeft, bool moveRight)
 {
 	//cout << position[1] << endl;
 	if (position[1] <= engine->GWindow.GetRampTop()) {
-		velocity.Y -= 0.5f;
-		velocity.X = 0;
+		velocity.AddY(-0.5f);
+		velocity.SetX(0);
 		return;
 	}
 	if (position[0] < engine->GWindow.GetMiddleW() + engine->GWindow.GetEighthW() && position[0] > engine->GWindow.GetMiddleW() - engine->GWindow.GetEighthW()) {///////////MIDDLE
 		ChangeMoveZone(0);
-		if (moveRight && velocity.X < 15) {
-			velocity.X += 1;
+		if (moveRight && velocity.GetX() < 15) {
+			velocity.AddX(1);
 		}
-		else if (!moveLeft && velocity.X > 0 && rand() % 10 <= 1) {
-			velocity.X -= 1;
+		else if (!moveLeft && velocity.GetX() > 0 && rand() % 10 <= 1) {
+			velocity.AddX(-1);
 		}
-		if (moveLeft && velocity.X > -15) {
-			velocity.X -= 1;
+		if (moveLeft && velocity.GetX() > -15) {
+			velocity.AddX(-1);
 		}
-		else if (!moveRight && velocity.X < 0 && rand() % 10 <= 1) {
-			velocity.X += 1;
+		else if (!moveRight && velocity.GetX() < 0 && rand() % 10 <= 1) {
+			velocity.AddX(1);
 		}
 		position[1] = engine->ImageRender.GetRendererHeight() - (engine->ImageRender.GetRendererHeight() / 8);
-		velocity.Y = 0;
+		velocity.SetY(0);
 	}
 	if (position[0] > engine->GWindow.GetMiddleW() + (engine->GWindow.GetEighthW()/2)) /////////Right Side
 	{
 		ChangeMoveZone(1);
-		if (velocity.X > 0) {
+		if (velocity.GetX() > 0) {
 			//cout << speedUp << endl;
-			velocity.Y = velocity.Y + 1;
-			velocity.X -= 1;
+			velocity.AddY(1);
+			velocity.AddX(-1);
 		}
-		else if (velocity.Y >= 0) {
-			velocity.Y = velocity.Y - 1;
+		else if (velocity.GetY() >= 0) {
+			velocity.AddY(-1);
 		}
-		if (velocity.Y < 0) {
-			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1)))/2) >= abs(position[1] - engine->GWindow.GetFloor())) {
-				velocity.Y = velocity.Y + 1;
-				velocity.X = velocity.X - 1;
+		if (velocity.GetY() < 0) {
+			if (abs((velocity.GetY() + (velocity.GetY() * (velocity.GetY() - 1))) / 2) >= abs(position[1] - engine->GWindow.GetFloor())) {
+				velocity.AddY(1);
+				velocity.AddX(-1);
 			}
 			else {
-				velocity.Y = velocity.Y - 1;
+				velocity.AddY(-1);
 			}
 		}
 	}
 	if (position[0] < engine->GWindow.GetMiddleW() - (engine->GWindow.GetEighthW()/2)) { /////////////////////LEFT SIDE
 		ChangeMoveZone(1);
-		if (velocity.X < 0) {
+		if (velocity.GetX() < 0) {
 			//cout << speedUp << endl;
-			velocity.Y = velocity.Y + 1;
-			velocity.X += 1;
+			velocity.AddY(1);
+			velocity.AddX(1);
 		}
-		else if (velocity.Y >= 0) {
-			velocity.Y = velocity.Y - 1;
+		else if (velocity.GetY() >= 0) {
+			velocity.AddY(-1);
 		}
-		if (velocity.Y < 0) {
-			if (abs((velocity.Y + (velocity.Y * (velocity.Y - 1))) / 2) >= abs(position[1] - engine->GWindow.GetFloor())) {
-				velocity.Y = velocity.Y + 1;
-				velocity.X = velocity.X + 1;
+		if (velocity.GetY() < 0) {
+			if (abs((velocity.GetY() + (velocity.GetY() * (velocity.GetY() - 1))) / 2) >= abs(position[1] - engine->GWindow.GetFloor())) {
+				velocity.AddY(1);
+				velocity.AddX(1);
 			}
 			else {
-				velocity.Y = velocity.Y - 1;
+				velocity.AddY(-1);
 			}
 		}
 	}
@@ -103,11 +103,11 @@ void Player::Movement(bool moveLeft, bool moveRight)
 
 void Player::ChangeDirection(int _direction)
 {
-	if (velocity.X > 0)
+	if (velocity.GetX() > 0)
 	{
 		CharacterFlip = SDL_FLIP_NONE;
 	}
-	else if (velocity.X < 0)
+	else if (velocity.GetX() < 0)
 	{
 		CharacterFlip = SDL_FLIP_HORIZONTAL;
 	}
@@ -116,7 +116,7 @@ void Player::ChangeDirection(int _direction)
 void Player::ChangeMoveZone(int newZone)
 {
 	if (newZone != MoveZone) {
-		EntrySpeed = velocity.X;
+		EntrySpeed = velocity.GetX();
 		MoveZone = newZone;
 	}
 }
@@ -130,11 +130,11 @@ void Player::SetRotation()
 
 	if (position[0] > engine->GWindow.GetMiddleW() + (engine->GWindow.GetEighthW() / 2)) /////////Right Side
 	{
-		Rotation = 0 - abs((15-abs(velocity.X))* 6);
+		Rotation = 0 - abs((15-abs(velocity.GetX()))* 6);
 	}
 	else if (position[0] < engine->GWindow.GetMiddleW() - (engine->GWindow.GetEighthW() / 2))
 	{
-		Rotation = abs((15 - abs(velocity.X)) * 6);
+		Rotation = abs((15 - abs(velocity.GetX())) * 6);
 	}
 	else 
 	{

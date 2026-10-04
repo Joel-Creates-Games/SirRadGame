@@ -60,7 +60,7 @@ void Axe::Collide(Character* other)
 	if (other->name == "SirRad")
 	{
 		axeHit = true;
-		if (engine->SirRad->performingTrick)
+		if (engine->SirRad->GetPerformingtrick())
 		{
 			engine->PrintLog("dodged with trick! + 500 score!");
 			engine->ChangeScore(500);
