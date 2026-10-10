@@ -91,23 +91,22 @@ void GameEngine::Step()
 {
     static Uint32 lastTime = SDL_GetTicks();
     static float timeAccumulator = 0.0f;
-    const float TIME_STEP = 16.667f; // Fixed 60 FPS update step
+    const float TIME_STEP = 16.667f; // Fixed 60Hz update step
 
     Uint32 currentTime = SDL_GetTicks();
     float frameTime = (float)(currentTime - lastTime);
     lastTime = currentTime;
 
-    if (frameTime > 100.0f)
-    {
+    // Spiral of Death preventer (Capped at 100ms)
+    if (frameTime > 100.0f) {
         frameTime = 100.0f;
     }
 
     timeAccumulator += frameTime;
-
     Input();
 
-    while (timeAccumulator >= TIME_STEP)
-    {
+    // Fixed timestep physics loop
+    while (timeAccumulator >= TIME_STEP) {
         Update();
         totalTime += TIME_STEP;
         timeAccumulator -= TIME_STEP;
@@ -116,27 +115,13 @@ void GameEngine::Step()
     Render();
 
 #ifndef __EMSCRIPTEN__
-    // Desktop frame-limiting delay
-    if (TIME_STEP - aTimer.getTicks() < 0)
-    {
-        //PrintLog("FrameRate: " + to_string(aTimer.getTicks()));
-    }
-    else
-    {
-        //PrintLog("FrameRate: 16.667");
+    // Native Desktop frame-limiting delay
+    if (TIME_STEP - aTimer.getTicks() >= 0) {
         SDL_Delay(TIME_STEP - aTimer.getTicks());
     }
     aTimer.resetTicksTimer();
 #endif
 }
-
-#ifdef __EMSCRIPTEN__
-static void EmscriptenLoopCallback(void* arg)
-{
-    GameEngine* engine = static_cast<GameEngine*>(arg);
-    engine->Step();
-}
-#endif
 
 void GameEngine::GameLoop()
 {
